@@ -1,0 +1,6 @@
+.git/
+.idea/
+packages/
+SnivysServerEvents/bin/
+SnivysServerEvents/obj/
+SnivysServerEvents.sln.DotSettings.user
