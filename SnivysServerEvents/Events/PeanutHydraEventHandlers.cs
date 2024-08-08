@@ -1,4 +1,4 @@
-﻿using Exiled.API.Features;
+using Exiled.API.Features;
 using Player = Exiled.Events.Handlers.Player;
 using SnivysServerEvents.Configs;
 
