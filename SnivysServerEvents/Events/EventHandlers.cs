@@ -63,7 +63,7 @@ namespace SnivysServerEvents.Events
         public void OnDiedPHE(DiedEventArgs ev)
         {
             if (ev.TargetOldRole != RoleTypeId.Scp173) return;
-            //Set the player who died and set them back as 173 
+            //Get the player who died and set them back as 173 
             ev.Player.Role.Set(RoleTypeId.Scp173, SpawnReason.ForceClass, RoleSpawnFlags.None);
             //calculate the new scale and health
             _PHEScale = Mathf.Max(0.1f, _PHELastKnownScale / 2);
