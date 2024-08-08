@@ -1,33 +1,29 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using CommandSystem;
 using Exiled.API.Enums;
 using Exiled.API.Features;
-using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
-using Mirror;
 using MEC;
 using PlayerRoles;
-using PluginAPI.Events;
 using UnityEngine;
-using Player = Exiled.Events.Handlers.Player;
-using System;
+using Random = System.Random;
+// ReSharper disable InconsistentNaming
 
 namespace SnivysServerEvents.Events
 {
     
     public class EventHandlers
     {
-        public Plugin plugin;
-        public EventHandlers(Plugin plugin) => this.plugin = plugin;
+        public Plugin Plugin;
+        public EventHandlers(Plugin plugin) => Plugin = plugin;
         
-        private static int _activatedGenerators = 0;
-
-        private Vector3 PeanutHydraEventDeathLocation;
-
-        private static float _PHEScale = 1.0f;
+        private static int _activatedGenerators;
+        private static float _PHEScale;
+        private static float _PHENewHealth;
+        private static float _PHELastKnownHeath;
+        private static float _PHELastKnownScale;
         
         public void OnEndingRound(RoundEndedEventArgs ev)
         {
@@ -59,26 +55,53 @@ namespace SnivysServerEvents.Events
         }
         public void OnDyingPHE(DyingEventArgs ev)
         {
-            if (ev.Player.Role == RoleTypeId.Scp173)
+            if (ev.Player.Role != RoleTypeId.Scp173) return;
+            _PHELastKnownHeath = ev.Player.Health;
+            _PHELastKnownScale = ev.Player.Scale.y;
+        }
+        
+        public void OnDiedPHE(DiedEventArgs ev)
+        {
+            if (ev.TargetOldRole != RoleTypeId.Scp173) return;
+            //Get the player who died and set them back as 173 
+            ev.Player.Role.Set(RoleTypeId.Scp173, SpawnReason.ForceClass, RoleSpawnFlags.None);
+            //calculate the new scale and health
+            _PHEScale = Mathf.Max(0.1f, _PHELastKnownScale / 2);
+            _PHENewHealth = _PHELastKnownHeath / 2;
+            //apply them to the formerly dead player
+            ev.Player.Health = Mathf.Max(_PHENewHealth, 1);
+            ev.Player.Scale.Set(_PHEScale, _PHEScale, _PHEScale);
+            //Get a random spectator and set them as a duplicate 173
+            Player newPlayer = GetRandomSpectator();
+            switch (newPlayer)
             {
-                PeanutHydraEventDeathLocation = ev.Player.Position;
+                case null when PeanutHydraEventHandlers.Config.UseAttackersIfNeeded:
+                    Log.Debug("No spectators found to become the new SCP-173, using attacker...");
+                    newPlayer = ev.Attacker;
+                    break;
+                case null:
+                    Log.Debug("No spectators found to become the new SCP-173");
+                    return;
             }
+            newPlayer.Role.Set(RoleTypeId.Scp173, SpawnReason.ForceClass, RoleSpawnFlags.None);
+            newPlayer.Position = ev.Player.Position;
+            newPlayer.Health = _PHENewHealth;
+            newPlayer.Scale = new Vector3(_PHEScale, _PHEScale, _PHEScale);
         }
 
-        /*public void OnDiedPHE(DiedEventArgs ev)
+        private static Player GetRandomSpectator()
         {
-            if (ev.TargetOldRole == RoleTypeId.Scp173)
-            {
-                ev.Player.Role.Set(RoleTypeId.Scp173, SpawnReason.ForceClass, RoleSpawnFlags.None);
-                _PHEScale -= 0.05f;
-                ev.Player.Scale.Set(_PHEScale, _PHEScale, _PHEScale);
-                List<Player> deadPlayers = Player.Get(Team.Dead);
-                //Player.Get(RoleTypeId.Spectator).GetRandomValue().RoleSet(RoleTypeId.Scp173);
-                foreach (var p in Player.List)
-                {
-                    p.Role.Set(RoleTypeId.Scp173, SpawnReason.ForceClass, RoleSpawnFlags.None);
-                }
-            }
-        }*/
+            // Get a list of players with the Spectator role
+            List<Player> spectators = Player.List.Where(p => p.Role == RoleTypeId.Spectator).ToList();
+
+            // If there are no spectators, return null
+            if (spectators.Count == 0)
+                return null;
+
+            // Select a random spectator
+            Random random = new();
+            int index = random.Next(spectators.Count);
+            return spectators[index];
+        }
     }
 }
