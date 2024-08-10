@@ -8,7 +8,7 @@ namespace SnivysServerEvents.Commands
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     internal class BlackoutCommand : ICommand
     {
-        public string Command { get; set; } = "VVE Blackout";
+        public string Command { get; set; } = "VVE_Blackout";
         public string[] Aliases { get; set; } = Array.Empty<string>();
         public string Description { get; set; } = "Starts the Blackout Event";
         public bool SanitizeResponse { get; set; } = true;

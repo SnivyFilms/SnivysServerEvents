@@ -8,7 +8,7 @@ namespace SnivysServerEvents.Commands
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     internal class PeanutHydraCommand : ICommand
     {
-        public string Command { get; set; } = "VVE SCP-173 Hydra";
+        public string Command { get; set; } = "VVE_SCP-173_Hydra";
         public string[] Aliases { get; set; } = Array.Empty<string>();
         public string Description { get; set; } = "Starts the 173 Hydra";
         public bool SanitizeResponse { get; set; } = true;

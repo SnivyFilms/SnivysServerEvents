@@ -8,7 +8,7 @@ namespace SnivysServerEvents.Commands
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     internal class PeanutInfectionCommand : ICommand
     {
-        public string Command { get; set; } = "VVE SCP-173 Infection";
+        public string Command { get; set; } = "VVE_SCP-173_Infection";
         public string[] Aliases { get; set; } = Array.Empty<string>();
         public string Description { get; set; } = "Starts the 173 Infection";
         public bool SanitizeResponse { get; set; } = true;
