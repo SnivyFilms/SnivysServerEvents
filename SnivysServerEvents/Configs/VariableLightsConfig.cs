@@ -11,5 +11,5 @@ public class VariableLightsConfig
     public float TimeForChange { get; set; } = 20;
 
     [Description("Should the lights only brighten and dim or allow for color changing too")]
-    public bool ColorChanging { get; set; } = true;
+    public bool ColorChanging { get; set; } = false;
 }
