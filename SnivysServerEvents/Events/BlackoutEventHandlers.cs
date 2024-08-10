@@ -10,7 +10,7 @@ namespace SnivysServerEvents.Events
         private static bool _boeStarted;
         public BlackoutEventHandlers()
         {
-            _config = new BlackoutConfig();
+            _config = Plugin.Instance.Config.BlackoutConfig;
             Plugin.ActiveEvent += 1;
             Maps.GeneratorActivating += Plugin.Instance.eventHandlers.OnGeneratorEngagedBOE;
             Start();

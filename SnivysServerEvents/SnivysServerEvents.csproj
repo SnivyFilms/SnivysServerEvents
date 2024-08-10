@@ -41,19 +41,16 @@
           <HintPath>$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll</HintPath>
         </Reference>
         <Reference Include="CommandSystem.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-          <HintPath>$(EXILED_REFERENCES)\CommandSystem.Core.dll</HintPath>
+          <HintPath>.$(EXILED_REFERENCES)\CommandSystem.Core.dll</HintPath>
         </Reference>
         <Reference Include="Exiled.API, Version=8.11.0.0, Culture=neutral, processorArchitecture=Amd64">
           <HintPath>$(EXILED_REFERENCES)\Exiled.API.dll</HintPath>
         </Reference>
-        <Reference Include="Exiled.CustomItems, Version=8.11.0.0, Culture=neutral, processorArchitecture=Amd64">
-          <HintPath>$(EXILED_REFERENCES)\Exiled.CustomItems.dll</HintPath>
-        </Reference>
-        <Reference Include="Exiled.CustomRoles, Version=8.11.0.0, Culture=neutral, processorArchitecture=Amd64">
-          <HintPath>$(EXILED_REFERENCES)\Exiled.CustomRoles.dll</HintPath>
-        </Reference>
         <Reference Include="Exiled.Events, Version=8.11.0.0, Culture=neutral, processorArchitecture=Amd64">
           <HintPath>$(EXILED_REFERENCES)\Exiled.Events.dll</HintPath>
+        </Reference>
+        <Reference Include="Exiled.Loader, Version=8.11.0.0, Culture=neutral, processorArchitecture=Amd64">
+          <HintPath>..\packages\EXILEDOFFICIAL.8.11.0\lib\net48\Exiled.Loader.dll</HintPath>
         </Reference>
         <Reference Include="Exiled.Permissions, Version=8.11.0.0, Culture=neutral, processorArchitecture=Amd64">
           <HintPath>$(EXILED_REFERENCES)\Exiled.Permissions.dll</HintPath>
@@ -75,7 +72,7 @@
           <HintPath>$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll</HintPath>
         </Reference>
         <Reference Include="YamlDotNet, Version=11.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
-          <HintPath>$(EXILED_REFERENCES)\YamlDotNet.dll</HintPath>
+          <HintPath>..\packages\EXILEDOFFICIAL.8.11.0\lib\net48\YamlDotNet.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>

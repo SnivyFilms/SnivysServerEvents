@@ -14,7 +14,7 @@ public class VariableLightsEventHandlers
     private static bool _vleStarted;
     public VariableLightsEventHandlers()
     {
-        _config = new VariableLightsConfig();
+        _config = Plugin.Instance.Config.VariableLightsConfig;
         Plugin.ActiveEvent += 1;
         Start();
     }
@@ -38,18 +38,23 @@ public class VariableLightsEventHandlers
         for (;;)
         {
             float aRandomNumber = (float)random.NextDouble();
-            if (_config.ColorChanging)
+            Log.Debug(aRandomNumber);
+            Log.Debug(_config.ColorChanging);
+            if (!_config.ColorChanging)
             {
-                float rRandomNumber = (float)random.NextDouble();
-                float gRandomNumber = (float)random.NextDouble();
-                float bRandomNumber = (float)random.NextDouble();
                 foreach (Room room in Room.List)
-                    room.Color = new Color(rRandomNumber, gRandomNumber, bRandomNumber, aRandomNumber);
+                    room.Color = new Color(aRandomNumber, aRandomNumber, aRandomNumber, aRandomNumber);
             }
             else
             {
+                float rRandomNumber = (float)random.NextDouble();
+                Log.Debug(rRandomNumber);
+                float gRandomNumber = (float)random.NextDouble();
+                Log.Debug(gRandomNumber);
+                float bRandomNumber = (float)random.NextDouble();
+                Log.Debug(bRandomNumber);
                 foreach (Room room in Room.List)
-                    room.Color = new Color(1f, 1f, 1f, aRandomNumber);
+                    room.Color = new Color(rRandomNumber, gRandomNumber, bRandomNumber, aRandomNumber);
             }
             yield return Timing.WaitForSeconds(_config.TimeForChange);
         }

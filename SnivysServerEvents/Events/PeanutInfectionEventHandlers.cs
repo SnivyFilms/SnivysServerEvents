@@ -10,7 +10,7 @@ namespace SnivysServerEvents.Events
         private static bool _pieStarted;
         public PeanutInfectionEventHandlers()
         {
-            _config = new PeanutInfectionConfig();
+            _config = Plugin.Instance.Config.PeanutInfectionConfig;
             Plugin.ActiveEvent += 1;
             Player.Died += Plugin.Instance.eventHandlers.OnKillingPIE;
             Start();

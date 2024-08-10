@@ -11,7 +11,7 @@ namespace SnivysServerEvents.Events
         private static bool _pheStarted;
         public PeanutHydraEventHandlers()
         {
-            Config = new PeanutHydraConfig();
+            Config = Plugin.Instance.Config.PeanutHydraConfig;
             Plugin.ActiveEvent += 1;
             Player.Dying += Plugin.Instance.eventHandlers.OnDyingPHE;
             Player.Died += Plugin.Instance.eventHandlers.OnDiedPHE;
