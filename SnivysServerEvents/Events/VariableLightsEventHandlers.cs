@@ -16,7 +16,6 @@ public class VariableLightsEventHandlers
     {
         _config = new VariableLightsConfig();
         Plugin.ActiveEvent += 1;
-        //Maps.GeneratorActivating += Plugin.Instance.eventHandlers.OnGeneratorEngagedBOE;
         Start();
     }
 

@@ -14,5 +14,6 @@ namespace SnivysServerEvents.Configs
         public BlackoutConfig BlackoutConfig { get; set; } = new();
         public PeanutInfectionConfig PeanutInfectionConfig { get; set; } = new();
         public PeanutHydraConfig PeanutHydraConfig { get; set; } = new();
+        public VariableLightsConfig VariableLightsConfig { get; set; } = new();
     }
 }
