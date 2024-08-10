@@ -9,6 +9,7 @@ using MEC;
 using PlayerRoles;
 using UnityEngine;
 using Random = System.Random;
+using Events = SnivysServerEvents.Events;
 // ReSharper disable InconsistentNaming
 
 namespace SnivysServerEvents.Events
@@ -25,11 +26,20 @@ namespace SnivysServerEvents.Events
         private static float _PHELastKnownHeath;
         private static float _PHELastKnownScale;
         
+        //Ending round
         public void OnEndingRound(RoundEndedEventArgs ev)
         {
-            _activatedGenerators = 0;
-            //BlackoutEventHandlers.EndEvent();
-            //PeanutInfectionEventHandlers.EndEvent();
+            Log.Debug("Checking if an event is active");
+            if (Plugin.ActiveEvent != 0)
+            {
+                Log.Debug("Disabling Event Handlers, Clearing Generator Count");
+                _activatedGenerators = 0;
+                BlackoutEventHandlers.EndEvent();
+                PeanutHydraEventHandlers.EndEvent();
+                PeanutInfectionEventHandlers.EndEvent();
+                VariableLightsEventHandlers.EndEvent();
+                Plugin.ActiveEvent = 0;
+            }
         }
 
         /*public void OnRoundStarted()
@@ -37,22 +47,34 @@ namespace SnivysServerEvents.Events
             throw new System.NotImplementedException();
         }*/
 
+        
+        //Blackout
         public void OnGeneratorEngagedBOE(GeneratorActivatingEventArgs ev)
         {
+            Log.Debug("Adding amount of generators to count");
             _activatedGenerators = Generator.Get(GeneratorState.Engaged).Count();
-
+            Log.Debug("Checking if generators is 3");
             if (_activatedGenerators == 3)
             {
+                Log.Debug("Disabling Blackout Event");
                 BlackoutEventHandlers.EndEvent();
+                Plugin.ActiveEvent -= 1;
+                _activatedGenerators = 0;
             }
         }
+        
+        // Peanut Hydra
         public void OnKillingPIE(DiedEventArgs ev)
         {
+            Log.Debug("Checking if the killer was 173");
             if (ev.Attacker.Role == RoleTypeId.Scp173 && ev.DamageHandler.Type == DamageType.Scp173)
             {
-                Timing.CallDelayed(2.0f, () => ev.Player.Role.Set(RoleTypeId.Scp173, SpawnReason.ForceClass, RoleSpawnFlags.None));
+                Log.Debug("Setting the killed to 173");
+                Timing.CallDelayed(0.5f, () => ev.Player.Role.Set(RoleTypeId.Scp173, SpawnReason.ForceClass, RoleSpawnFlags.None));
             }
         }
+        
+        // Peanut Hydra
         public void OnDyingPHE(DyingEventArgs ev)
         {
             if (ev.Player.Role != RoleTypeId.Scp173) return;

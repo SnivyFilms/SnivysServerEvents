@@ -11,6 +11,7 @@ namespace SnivysServerEvents.Events
         public PeanutInfectionEventHandlers()
         {
             _config = new PeanutInfectionConfig();
+            Plugin.ActiveEvent += 1;
             Player.Died += Plugin.Instance.eventHandlers.OnKillingPIE;
             Start();
         }
@@ -21,14 +22,14 @@ namespace SnivysServerEvents.Events
             Cassie.MessageTranslated(_config.StartEventCassieMessage, _config.StartEventCassieText);
         }
 
-        /*public static void EndEvent()
+        public static void EndEvent()
         {
-            //if (_pieStarted)
-            //{
+            if (_pieStarted)
+            {
                 Cassie.MessageTranslated(_config.EndEventCassieMessage, _config.EndEventCassieText);
                 Player.Died -= Plugin.Instance.eventHandlers.OnKillingPIE;
                 _pieStarted = false;
-            //}
-        }*/
+            }
+        }
     }
 }

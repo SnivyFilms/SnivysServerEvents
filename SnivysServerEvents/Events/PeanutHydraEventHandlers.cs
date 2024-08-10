@@ -4,6 +4,7 @@ using SnivysServerEvents.Configs;
 
 namespace SnivysServerEvents.Events
 {
+    
     public class PeanutHydraEventHandlers
     {
         public static PeanutHydraConfig Config;
@@ -11,6 +12,7 @@ namespace SnivysServerEvents.Events
         public PeanutHydraEventHandlers()
         {
             Config = new PeanutHydraConfig();
+            Plugin.ActiveEvent += 1;
             Player.Dying += Plugin.Instance.eventHandlers.OnDyingPHE;
             Player.Died += Plugin.Instance.eventHandlers.OnDiedPHE;
             Start();

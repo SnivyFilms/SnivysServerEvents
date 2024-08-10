@@ -6,11 +6,11 @@ using SnivysServerEvents.Events;
 namespace SnivysServerEvents.Commands
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    internal class BlackoutCommand : ICommand
+    internal class PeanutHydraCommand : ICommand
     {
-        public string Command { get; set; } = "VVE Blackout";
+        public string Command { get; set; } = "VVE SCP-173 Hydra";
         public string[] Aliases { get; set; } = Array.Empty<string>();
-        public string Description { get; set; } = "Starts the Blackout Event";
+        public string Description { get; set; } = "Starts the 173 Hydra";
         public bool SanitizeResponse { get; set; } = true;
 
         public bool Execute(ArraySegment<string> args, ICommandSender sender, out string response)
@@ -20,8 +20,8 @@ namespace SnivysServerEvents.Commands
                 response = "You do not have the required permission to use this command";
                 return false;
             }
-            var blackoutEventHandlers = new BlackoutEventHandlers();
-            response = "Starting Blackout Event";
+            var hydraEventHandlers = new PeanutHydraEventHandlers();
+            response = "Starting Peanut Hydra Event";
             return true;
         }
     }

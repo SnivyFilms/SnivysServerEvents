@@ -10,7 +10,7 @@ namespace SnivysServerEvents.Configs
 
         [Description("Debug Printouts")] 
         public bool Debug { get; set; } = false;
-        //To do indepentent events configs
+        //Independent Event Configs
         public BlackoutConfig BlackoutConfig { get; set; } = new();
         public PeanutInfectionConfig PeanutInfectionConfig { get; set; } = new();
         public PeanutHydraConfig PeanutHydraConfig { get; set; } = new();
