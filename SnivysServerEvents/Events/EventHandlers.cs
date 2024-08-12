@@ -38,6 +38,7 @@ namespace SnivysServerEvents.Events
                 PeanutHydraEventHandlers.EndEvent();
                 PeanutInfectionEventHandlers.EndEvent();
                 VariableLightsEventHandlers.EndEvent();
+                ShortEventHandlers.EndEvent();
                 Plugin.ActiveEvent = 0;
             }
         }
