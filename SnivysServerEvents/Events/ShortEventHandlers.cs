@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Media;
-using System.Text;
-using System.Threading.Tasks;
-using SnivysServerEvents.Configs;
+﻿using SnivysServerEvents.Configs;
 using Exiled.API.Features;
 
 namespace SnivysServerEvents.Events
@@ -18,6 +12,7 @@ namespace SnivysServerEvents.Events
         {
             _config = Plugin.Instance.Config.ShortConfig;
             Plugin.ActiveEvent += 1;
+            
             Start();
         }
         public static void Start()
@@ -32,8 +27,11 @@ namespace SnivysServerEvents.Events
         }
         public static void EndEvent()
         {
-            Cassie.MessageTranslated(_config.EndEventCassieMessage, _config.EndEventCassieText);
-            _seStarted = false;
+            if (_seStarted)
+            {
+                Cassie.MessageTranslated(_config.EndEventCassieMessage, _config.EndEventCassieText);
+                _seStarted = false;
+            }
         }
     }
 }
