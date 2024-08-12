@@ -16,5 +16,6 @@ namespace SnivysServerEvents.Configs
         public PeanutInfectionConfig PeanutInfectionConfig { get; set; } = new();
         public PeanutHydraConfig PeanutHydraConfig { get; set; } = new();
         public VariableLightsConfig VariableLightsConfig { get; set; } = new();
+        public ShortConfig ShortConfig { get; set; } = new();
     }
 }
