@@ -126,5 +126,12 @@ namespace SnivysServerEvents.Events
             int index = random.Next(spectators.Count);
             return spectators[index];
         }
+        public void OnRoleSwapSE(ChangingRoleEventArgs ev)
+        {
+            foreach (var player in Player.List)
+            {
+                player.Scale = new UnityEngine.Vector3(0.25f, 0.25f, 0.25f);
+            }
+        }
     }
 }
