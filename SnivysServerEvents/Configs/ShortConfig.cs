@@ -1,5 +1,7 @@
 ﻿
+using System.Collections.Generic;
 using System.ComponentModel;
+using JetBrains.Annotations;
 
 namespace SnivysServerEvents.Configs
 {
@@ -13,5 +15,11 @@ namespace SnivysServerEvents.Configs
 
         [Description("Determines how small each player is")]
         public float PlayerSize { get; set; } = 0.25f;
+
+        /*[Description("What item does the players start with?")]
+        public List<string> StartingItem { get; set; } = new()
+        {
+            $"{ItemType.KeycardJanitor}"
+        };*/
     }
 }
