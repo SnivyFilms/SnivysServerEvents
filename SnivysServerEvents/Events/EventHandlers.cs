@@ -130,7 +130,7 @@ namespace SnivysServerEvents.Events
         {
             foreach (var player in Player.List)
             {
-                player.Scale = new UnityEngine.Vector3(0.25f, 0.25f, 0.25f);
+                player.Scale = new Vector3(ShortEventHandlers.GetPlayerSize(), ShortEventHandlers.GetPlayerSize(), ShortEventHandlers.GetPlayerSize());
             }
         }
     }

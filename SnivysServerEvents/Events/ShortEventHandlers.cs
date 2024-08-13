@@ -21,9 +21,14 @@ namespace SnivysServerEvents.Events
             foreach (var player in Player.List)
             {
                 player.AddItem(ItemType.KeycardJanitor);
-                player.Scale = new UnityEngine.Vector3(0.25f, 0.25f, 0.25f);
+                player.Scale = new UnityEngine.Vector3(GetPlayerSize(), GetPlayerSize(), GetPlayerSize());
             }
             Cassie.MessageTranslated(_config.StartEventCassieMessage, _config.StartEventCassieText);
+        }
+
+        public static float GetPlayerSize()
+        {
+            return _config.PlayerSize;
         }
         public static void EndEvent()
         {

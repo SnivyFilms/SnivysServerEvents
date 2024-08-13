@@ -1,4 +1,6 @@
 ﻿
+using System.ComponentModel;
+
 namespace SnivysServerEvents.Configs
 {
     public class ShortConfig
@@ -8,5 +10,8 @@ namespace SnivysServerEvents.Configs
 
         public string EndEventCassieMessage { get; set; } = "Small Humans Test Deactivation";
         public string EndEventCassieText { get; set; } = "Small Humans Test Deactivation (Short Event Ended)";
+
+        [Description("Determines how small each player is")]
+        public float PlayerSize { get; set; } = 0.25f;
     }
 }
