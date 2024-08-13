@@ -12,7 +12,7 @@ namespace SnivysServerEvents.Events
         {
             _config = Plugin.Instance.Config.ShortConfig;
             Plugin.ActiveEvent += 1;
-            
+            Exiled.Events.Handlers.Player.ChangingRole += Plugin.Instance.eventHandlers.OnRoleSwapSE;
             Start();
         }
         public static void Start()
@@ -30,6 +30,7 @@ namespace SnivysServerEvents.Events
             if (_seStarted)
             {
                 Cassie.MessageTranslated(_config.EndEventCassieMessage, _config.EndEventCassieText);
+                Exiled.Events.Handlers.Player.ChangingRole -= Plugin.Instance.eventHandlers.OnRoleSwapSE;
                 _seStarted = false;
             }
         }
