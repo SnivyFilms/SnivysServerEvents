@@ -7,9 +7,10 @@ Currently the events part of the plugin is provided below
 - SCP 173 Infection (when 173 kills someone, they become 173)
 - SCP 173 Hydra (when 173 dies, they respawn with another player both as 173, which are smaller)
 - Variable Lights
+- Short Players Event
 
 Exiled Permission: vvevents.run
-RA Commands: VVE_Blackout, VVE_SCP-173_Infection, VVE_SCP-173_Hydra, VVE_Variable_Lights
+RA Commands: VVE_Blackout, VVE_SCP-173_Infection, VVE_SCP-173_Hydra, VVE_Variable_Lights, VVE_Short
 
 Feel free to fork and contribute to this plugin.
 
@@ -17,3 +18,4 @@ This plugin is not designed to add new gamemodes that takes place instead of the
 
 # Credits
 @Mostly-Lucid for helping a lot with the SCP-173 Hydra event (and by that I mean doing it entirely because I had a very smooth brain moment)
+@Jamwolff for the Short Players Event
