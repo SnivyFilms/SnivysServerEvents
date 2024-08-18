@@ -12,7 +12,10 @@ namespace SnivysServerEvents.Events
         {
             _config = Plugin.Instance.Config.BlackoutConfig;
             Plugin.ActiveEvent += 1;
-            Maps.GeneratorActivating += Plugin.Instance.eventHandlers.OnGeneratorEngagedBOE;
+            if (_config.GeneratorEndsEvent)
+            {
+                Maps.GeneratorActivating += Plugin.Instance.eventHandlers.OnGeneratorEngagedBOE;
+            }
             Start();
         }
 
@@ -33,7 +36,10 @@ namespace SnivysServerEvents.Events
             if (_boeStarted)
             {
                 Cassie.MessageTranslated(_config.EndEventCassieMessage, _config.EndEventCassieText);
-                Maps.GeneratorActivating -= Plugin.Instance.eventHandlers.OnGeneratorEngagedBOE;
+                if (_config.GeneratorEndsEvent)
+                {
+                    Maps.GeneratorActivating -= Plugin.Instance.eventHandlers.OnGeneratorEngagedBOE;
+                }
                 Map.TurnOffAllLights(1);
                 _boeStarted = false;
             }
