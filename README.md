@@ -18,4 +18,5 @@ This plugin is not designed to add new gamemodes that takes place instead of the
 
 # Credits
 @Mostly-Lucid for helping a lot with the SCP-173 Hydra event (and by that I mean doing it entirely because I had a very smooth brain moment)
+
 @Jamwolff for the Short Players Event
