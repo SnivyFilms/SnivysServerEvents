@@ -34,8 +34,8 @@ namespace SnivysServerEvents.Commands
                 public MainCommand() => LoadGeneratedCommands();
                 protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
                 {
-                        response = "Please enter a valid event to run:";
-                        foreach (var x in this.Commands)
+                        response = "Please enter a valid event to run:\n";
+                        foreach (var x in Commands)
                         {
                                 string args = "";
                                 if (x.Value is IUsageProvider usage)
@@ -45,6 +45,8 @@ namespace SnivysServerEvents.Commands
                                                 args += $"[{arg}] ";
                                         }
                                 }
+
+                                response += $"{x.Key}{args}: {x.Value.Description}.\n";
                         }
 
                         return false;

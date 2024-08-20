@@ -65,14 +65,15 @@ public class FreezingTemperaturesEventHandlers
                 freezing.Primed = true;
                 freezing.MaxDiameter = 10;
                 freezing.CreatePickup(rooms.Position);
-                yield return Timing.WaitForSeconds(_config.KillPlayersInZoneAfterTime);
-                foreach (Player player in Player.List)
-                {
-                    if (player.Zone == ZoneType.LightContainment)
-                        player.Kill(_config.PlayersDeathReason);
-                }
             }
         }
+        yield return Timing.WaitForSeconds(_config.KillPlayersInZoneAfterTime);
+        foreach (Player player in Player.List)
+        {
+            if (player.Zone == ZoneType.LightContainment)
+                player.Kill(_config.PlayersDeathReason);
+        }
+        
         yield return Timing.WaitForSeconds(_config.HeavyTimeWarning);
         Cassie.MessageTranslated(_config.HeavyHalfTimeRemainingWarningMessage, _config.HeavyHalfTimeRemainingWarningText);
         
@@ -108,13 +109,13 @@ public class FreezingTemperaturesEventHandlers
                 freezing.Primed = true;
                 freezing.MaxDiameter = 10;
                 freezing.CreatePickup(rooms.Position);
-                yield return Timing.WaitForSeconds(_config.KillPlayersInZoneAfterTime);
-                foreach (Player player in Player.List)
-                {
-                    if (player.Zone == ZoneType.HeavyContainment)
-                        player.Kill(_config.PlayersDeathReason);
-                }
             }
+        }
+        yield return Timing.WaitForSeconds(_config.KillPlayersInZoneAfterTime);
+        foreach (Player player in Player.List)
+        {
+            if (player.Zone == ZoneType.HeavyContainment)
+                player.Kill(_config.PlayersDeathReason);
         }
         
         yield return Timing.WaitForSeconds(_config.EntranceTimeWarning);
@@ -146,13 +147,13 @@ public class FreezingTemperaturesEventHandlers
                 freezing.Primed = true;
                 freezing.MaxDiameter = 10;
                 freezing.CreatePickup(rooms.Position);
-                yield return Timing.WaitForSeconds(_config.KillPlayersInZoneAfterTime);
-                foreach (Player player in Player.List)
-                {
-                    if (player.Zone == ZoneType.Entrance)
-                        player.Kill(_config.PlayersDeathReason);
-                }
             }
+        }
+        yield return Timing.WaitForSeconds(_config.KillPlayersInZoneAfterTime);
+        foreach (Player player in Player.List)
+        {
+            if (player.Zone == ZoneType.Entrance)
+                player.Kill(_config.PlayersDeathReason);
         }
     }
     public static void EndEvent()
