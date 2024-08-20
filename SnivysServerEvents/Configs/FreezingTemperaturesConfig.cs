@@ -4,8 +4,8 @@ namespace SnivysServerEvents.Configs;
 
 public class FreezingTemperaturesConfig
 {
-    public string StartEventCassieMessage { get; set; } = "pitch_0.5 .g7 .g7 .g7 X K end of the world event detected";
-    public string StartEventCassieText { get; set; } = "XK end-of-the-world event detected. (173 cloning event)";
+    public string StartEventCassieMessage { get; set; } = "Temperature Failure";
+    public string StartEventCassieText { get; set; } = "Temperature Failure (Zone Freezing Event)";
     
     [Description("How long before the Light Containment Zone Time Warning")]
     public float LightTimeWarning { get; set; } = 300f;

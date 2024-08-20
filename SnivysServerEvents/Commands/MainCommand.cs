@@ -18,6 +18,7 @@ namespace SnivysServerEvents.Commands
                         try
                         {
                                 RegisterCommand(new BlackoutCommand());
+                                RegisterCommand(new FreezingTemperaturesCommand());
                                 RegisterCommand(new PeanutHydraCommand());
                                 RegisterCommand(new PeanutInfectionCommand());
                                 RegisterCommand(new ShortCommand());
@@ -33,7 +34,7 @@ namespace SnivysServerEvents.Commands
                 public MainCommand() => LoadGeneratedCommands();
                 protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
                 {
-                        response = "Please enter a valid event to run:\nBlackout\n173Hydra\n173Infection\nShortPeople\nVariableLights";
+                        response = "Please enter a valid event to run:";
                         foreach (var x in this.Commands)
                         {
                                 string args = "";
