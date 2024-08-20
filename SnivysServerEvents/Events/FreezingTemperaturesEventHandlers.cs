@@ -4,6 +4,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using Exiled.API.Features.Items;
 using Interactables.Interobjects.DoorUtils;
+using LightContainmentZoneDecontamination;
 using MEC;
 using SnivysServerEvents.Configs;
 using UnityEngine;
@@ -27,6 +28,7 @@ public class FreezingTemperaturesEventHandlers
     {
         _fteStarted = true;
         Cassie.MessageTranslated(_config.StartEventCassieMessage, _config.StartEventCassieText);
+        DecontaminationController.Singleton.NetworkRoundStartTime = -1.0;
         _freezingTemperaturesHandle = Timing.RunCoroutine(FreezingTemperaturesTiming());
     }
 
