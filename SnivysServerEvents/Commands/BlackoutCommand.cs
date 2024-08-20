@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security;
 using CommandSystem;
 using Exiled.Permissions.Extensions;
 using SnivysServerEvents.Events;
@@ -8,10 +9,10 @@ namespace SnivysServerEvents.Commands
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     internal class BlackoutCommand : ICommand
     {
-        public string Command { get; set; } = "VVE_Blackout";
+        public string Command { get; set; } = "Blackout";
         public string[] Aliases { get; set; } = Array.Empty<string>();
         public string Description { get; set; } = "Starts the Blackout Event";
-        public bool SanitizeResponse { get; set; } = true;
+        public bool SanitizeResponse { get; set; } = false;
 
         public bool Execute(ArraySegment<string> args, ICommandSender sender, out string response)
         {

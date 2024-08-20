@@ -8,10 +8,10 @@ namespace SnivysServerEvents.Commands
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     internal class VariableLightCommand : ICommand
     {
-        public string Command { get; set; } = "VVE_Variable_Lights";
+        public string Command { get; set; } = "VariableLights";
         public string[] Aliases { get; set; } = Array.Empty<string>();
         public string Description { get; set; } = "Starts the Variable Lights Event. (PHOTOSENSITIVITY WARNING!)";
-        public bool SanitizeResponse { get; set; } = true;
+        public bool SanitizeResponse { get; set; } = false;
 
         public bool Execute(ArraySegment<string> args, ICommandSender sender, out string response)
         {

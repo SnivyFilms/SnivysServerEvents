@@ -9,10 +9,10 @@ namespace SnivysServerEvents.Commands
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     internal class ShortCommand : ICommand
     {
-        public string Command { get; set; } = "VVE_Short";
+        public string Command { get; set; } = "ShortPeople";
         public string[] Aliases { get; set; } = Array.Empty<string>();
         public string Description { get; set; } = "Starts the Short People Event";
-        public bool SanitizeResponse { get; set; } = true;
+        public bool SanitizeResponse { get; set; } = false;
 
         public bool Execute(ArraySegment<string> args, ICommandSender sender, out string response)
         {
