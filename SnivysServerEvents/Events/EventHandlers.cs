@@ -39,6 +39,7 @@ namespace SnivysServerEvents.Events
                 PeanutInfectionEventHandlers.EndEvent();
                 VariableLightsEventHandlers.EndEvent();
                 ShortEventHandlers.EndEvent();
+                FreezingTemperaturesEventHandlers.EndEvent();
                 Plugin.ActiveEvent = 0;
             }
         }

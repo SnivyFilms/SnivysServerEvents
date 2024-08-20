@@ -17,5 +17,6 @@ namespace SnivysServerEvents.Configs
         public PeanutHydraConfig PeanutHydraConfig { get; set; } = new();
         public VariableLightsConfig VariableLightsConfig { get; set; } = new();
         public ShortConfig ShortConfig { get; set; } = new();
+        public FreezingTemperaturesConfig FreezingTemperaturesConfig { get; set; } = new();
     }
 }
