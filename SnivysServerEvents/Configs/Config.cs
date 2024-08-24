@@ -18,5 +18,6 @@ namespace SnivysServerEvents.Configs
         public VariableLightsConfig VariableLightsConfig { get; set; } = new();
         public ShortConfig ShortConfig { get; set; } = new();
         public FreezingTemperaturesConfig FreezingTemperaturesConfig { get; set; } = new();
+        public ChatoicConfig ChaoticConfig { get; set; }
     }
 }

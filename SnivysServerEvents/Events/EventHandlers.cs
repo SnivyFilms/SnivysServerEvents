@@ -40,6 +40,7 @@ namespace SnivysServerEvents.Events
                 VariableLightsEventHandlers.EndEvent();
                 ShortEventHandlers.EndEvent();
                 FreezingTemperaturesEventHandlers.EndEvent();
+                ChaoticEventHandlers.EndEvent();
                 Plugin.ActiveEvent = 0;
             }
         }

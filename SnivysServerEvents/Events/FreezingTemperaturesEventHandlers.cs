@@ -19,6 +19,7 @@ public class FreezingTemperaturesEventHandlers
     private static bool _fteStarted;
     public FreezingTemperaturesEventHandlers()
     {
+        if (_fteStarted) return;
         _config = Plugin.Instance.Config.FreezingTemperaturesConfig;
         Plugin.ActiveEvent += 1;
         Start();

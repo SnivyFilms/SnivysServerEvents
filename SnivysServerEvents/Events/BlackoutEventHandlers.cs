@@ -10,6 +10,7 @@ namespace SnivysServerEvents.Events
         private static bool _boeStarted;
         public BlackoutEventHandlers()
         {
+            if (_boeStarted) return;
             _config = Plugin.Instance.Config.BlackoutConfig;
             Plugin.ActiveEvent += 1;
             if (_config.GeneratorEndsEvent)

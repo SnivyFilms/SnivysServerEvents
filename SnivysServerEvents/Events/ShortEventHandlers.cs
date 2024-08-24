@@ -10,6 +10,7 @@ namespace SnivysServerEvents.Events
         
         public ShortEventHandlers()
         {
+            if (_seStarted) return;
             _config = Plugin.Instance.Config.ShortConfig;
             Plugin.ActiveEvent += 1;
             Exiled.Events.Handlers.Player.ChangingRole += Plugin.Instance.eventHandlers.OnRoleSwapSE;

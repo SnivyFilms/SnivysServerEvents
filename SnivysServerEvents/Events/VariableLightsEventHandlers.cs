@@ -14,6 +14,7 @@ public class VariableLightsEventHandlers
     private static bool _vleStarted;
     public VariableLightsEventHandlers()
     {
+        if (_vleStarted) return;
         _config = Plugin.Instance.Config.VariableLightsConfig;
         Plugin.ActiveEvent += 1;
         Start();
