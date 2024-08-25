@@ -384,18 +384,12 @@ public class ChaoticEventHandlers
                         foreach (Player player in Player.List)
                         {
                             Log.Debug($"Spawning a grenade on {player}");
+                            ExplosiveGrenade grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
                             if (_config.GrenadeFeetRandomFuse)
-                            {
-                                ExplosiveGrenade grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
                                 grenade.FuseTime = random.Next(minValue: 1, maxValue: 50);
-                                grenade.SpawnActive(player.Position);
-                            }
                             else
-                            {
-                                ExplosiveGrenade grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
                                 grenade.FuseTime = _config.GrenadeFeetFuse;
-                                grenade.SpawnActive(player.Position);
-                            }
+                            grenade.SpawnActive(player.Position);
                         }
                     }
                     else
