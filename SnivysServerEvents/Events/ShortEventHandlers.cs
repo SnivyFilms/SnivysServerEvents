@@ -22,10 +22,12 @@ namespace SnivysServerEvents.Events
             foreach (var player in Player.List)
             {
                 player.AddItem(ItemType.KeycardJanitor);
+                Log.Debug($"Added a Janitor Keycard to {player}");
                 //To Do:
                 //Configurable Adding Item
                 //player.AddItem(_config.StartingItem);
                 player.Scale = new UnityEngine.Vector3(GetPlayerSize(), GetPlayerSize(), GetPlayerSize());
+                Log.Debug($"Set {player} size to {GetPlayerSize()}");
             }
             Cassie.MessageTranslated(_config.StartEventCassieMessage, _config.StartEventCassieText);
         }
@@ -39,6 +41,7 @@ namespace SnivysServerEvents.Events
             if (_seStarted)
             {
                 Cassie.MessageTranslated(_config.EndEventCassieMessage, _config.EndEventCassieText);
+                Log.Debug("Unregistering ChangingRole (SE) Event Handlers");
                 Exiled.Events.Handlers.Player.ChangingRole -= Plugin.Instance.eventHandlers.OnRoleSwapSE;
                 _seStarted = false;
             }

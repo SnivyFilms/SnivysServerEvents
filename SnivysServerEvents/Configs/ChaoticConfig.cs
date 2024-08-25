@@ -85,6 +85,9 @@ public class ChatoicConfig
     [Description("Should the Chaos Event be able to enable other events?")]
     public bool ChaosEventEnablesOtherEvents { get; set; } = true;
 
+    [Description("Should the other events that get activated end when the next cycle comes along?")]
+    public bool ChaosEventEndsOtherEvents { get; set; } = false;
+
     [Description("Should the FBI Open Up Event be active?")]
     public bool FBIOpenUpEvent { get; set; } = true;
 
@@ -95,4 +98,16 @@ public class ChatoicConfig
     public string FBIOpenUpMTFText { get; set; } = "Fight or Flight.";
     [Description("How long should it take before the foundation gets teleported to the target?")]
     public float FBITeleportTime { get; set; } = 5f;
+
+    [Description("Should the grenade feet event be active?")]
+    public bool GrenadeFeetEvent { get; set; } = true;
+
+    [Description("Should grenade fuses be random?")]
+    public bool GrenadeFeetRandomFuse { get; set; } = true;
+
+    [Description("How long should the fuse on the grenades be if it's not random?")]
+    public float GrenadeFeetFuse { get; set; } = 5f;
+
+    [Description("What should the broadcast be before the grenades drop on people?")]
+    public string GrenadeFeetText { get; set; } = "You might want to be careful on where you step";
 }

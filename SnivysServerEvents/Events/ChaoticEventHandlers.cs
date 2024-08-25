@@ -7,6 +7,7 @@ using Exiled.API.Extensions;
 using MEC;
 using SnivysServerEvents.Configs;
 using Exiled.API.Features;
+using Exiled.API.Features.Items;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.Handlers;
 using PlayerRoles;
@@ -51,6 +52,16 @@ public class ChaoticEventHandlers
         {
             int chaosRandomNumber = random.Next(minValue:1, maxValue:50);
             Log.Debug(chaosRandomNumber);
+            if (_config.ChaosEventEndsOtherEvents)
+            {
+                Log.Debug("Event ends other events active, ending other events.");
+                BlackoutEventHandlers.EndEvent();
+                FreezingTemperaturesEventHandlers.EndEvent();
+                PeanutHydraEventHandlers.EndEvent();
+                PeanutInfectionEventHandlers.EndEvent();
+                ShortEventHandlers.EndEvent();
+                VariableLightsEventHandlers.EndEvent();
+            }
             switch (chaosRandomNumber)
             {
                 case 1:
@@ -357,6 +368,38 @@ public class ChaoticEventHandlers
                     }
                     else
                         Log.Debug("FBI Open Up Event disabled");
+                    break;
+                case 15:
+                    if (_config.GrenadeFeetEvent)
+                    {
+                        Log.Debug("Grenade Feet Event active, running code");
+                        foreach (Player player in Player.List)
+                        {
+                            Log.Debug($"Grenade feet warning being shown to {player}");
+                            player.Broadcast(new Exiled.API.Features.Broadcast(_config.GrenadeFeetText, (ushort) _config.BroadcastDisplayTime));
+                        }
+
+                        yield return Timing.WaitForSeconds(random.Next(minValue: 1, maxValue: 50));
+
+                        foreach (Player player in Player.List)
+                        {
+                            Log.Debug($"Spawning a grenade on {player}");
+                            if (_config.GrenadeFeetRandomFuse)
+                            {
+                                ExplosiveGrenade grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
+                                grenade.FuseTime = random.Next(minValue: 1, maxValue: 50);
+                                grenade.SpawnActive(player.Position);
+                            }
+                            else
+                            {
+                                ExplosiveGrenade grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
+                                grenade.FuseTime = _config.GrenadeFeetFuse;
+                                grenade.SpawnActive(player.Position);
+                            }
+                        }
+                    }
+                    else
+                        Log.Debug("Grenade Feet Event disabled");
                     break;
             }
             yield return Timing.WaitForSeconds(_config.TimeForChaosEvent);
