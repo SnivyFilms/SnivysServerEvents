@@ -9,7 +9,7 @@ namespace SnivysServerEvents.Commands
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     internal class ChaoticCommand : ICommand
     {
-        public string Command { get; set; } = "Chatoic";
+        public string Command { get; set; } = "Chaotic";
         public string[] Aliases { get; set; } = Array.Empty<string>();
         public string Description { get; set; } = "Starts the Chaotic Event";
         public bool SanitizeResponse { get; set; } = false;
