@@ -34,16 +34,14 @@ namespace SnivysServerEvents.Events
 
         public static void EndEvent()
         {
-            if (_boeStarted)
+            if (!_boeStarted) return;
+            Cassie.MessageTranslated(_config.EndEventCassieMessage, _config.EndEventCassieText);
+            if (_config.GeneratorEndsEvent)
             {
-                Cassie.MessageTranslated(_config.EndEventCassieMessage, _config.EndEventCassieText);
-                if (_config.GeneratorEndsEvent)
-                {
-                    Maps.GeneratorActivating -= Plugin.Instance.eventHandlers.OnGeneratorEngagedBOE;
-                }
-                Map.TurnOffAllLights(1);
-                _boeStarted = false;
+                Maps.GeneratorActivating -= Plugin.Instance.eventHandlers.OnGeneratorEngagedBOE;
             }
+            Map.TurnOffAllLights(1);
+            _boeStarted = false;
         }
     }
 }

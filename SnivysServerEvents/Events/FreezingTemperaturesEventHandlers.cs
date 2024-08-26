@@ -25,7 +25,7 @@ public class FreezingTemperaturesEventHandlers
         Start();
     }
 
-    public void Start()
+    private static void Start()
     {
         _fteStarted = true;
         Cassie.MessageTranslated(_config.StartEventCassieMessage, _config.StartEventCassieText);
@@ -33,7 +33,7 @@ public class FreezingTemperaturesEventHandlers
         _freezingTemperaturesHandle = Timing.RunCoroutine(FreezingTemperaturesTiming());
     }
 
-    public static IEnumerator<float> FreezingTemperaturesTiming()
+    private static IEnumerator<float> FreezingTemperaturesTiming()
     {
         if (!_fteStarted)
         {
@@ -161,11 +161,9 @@ public class FreezingTemperaturesEventHandlers
     }
     public static void EndEvent()
     {
-        if (_fteStarted)
-        {
-            _fteStarted = false;
-            Timing.KillCoroutines(_freezingTemperaturesHandle);
-            Map.ResetLightsColor();
-        }
+        if (!_fteStarted) return;
+        _fteStarted = false;
+        Timing.KillCoroutines(_freezingTemperaturesHandle);
+        Map.ResetLightsColor();
     }
 }

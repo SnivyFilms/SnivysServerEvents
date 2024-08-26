@@ -20,7 +20,7 @@ public class VariableLightsEventHandlers
         Start();
     }
 
-    public void Start()
+    private static void Start()
     {
         _vleStarted = true;
         Map.ResetLightsColor();
@@ -28,7 +28,7 @@ public class VariableLightsEventHandlers
         _lightChangingHandle = Timing.RunCoroutine(VariableLightsTiming());
     }
 
-    public static IEnumerator<float> VariableLightsTiming()
+    private static IEnumerator<float> VariableLightsTiming()
     {
         Random random = new Random();
         if (!_vleStarted)
@@ -62,11 +62,9 @@ public class VariableLightsEventHandlers
     }
     public static void EndEvent()
     {
-        if (_vleStarted)
-        {
-            _vleStarted = false;
-            Timing.KillCoroutines(_lightChangingHandle);
-            Map.ResetLightsColor();
-        }
+        if (!_vleStarted) return;
+        _vleStarted = false;
+        Timing.KillCoroutines(_lightChangingHandle);
+        Map.ResetLightsColor();
     }
 }

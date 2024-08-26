@@ -17,7 +17,7 @@ namespace SnivysServerEvents.Events
             Start();
         }
 
-        public static void Start()
+        private static void Start()
         {
             _pieStarted = true;
             Cassie.MessageTranslated(_config.StartEventCassieMessage, _config.StartEventCassieText);
@@ -25,12 +25,10 @@ namespace SnivysServerEvents.Events
 
         public static void EndEvent()
         {
-            if (_pieStarted)
-            {
-                Cassie.MessageTranslated(_config.EndEventCassieMessage, _config.EndEventCassieText);
-                Player.Died -= Plugin.Instance.eventHandlers.OnKillingPIE;
-                _pieStarted = false;
-            }
+            if (!_pieStarted) return;
+            Cassie.MessageTranslated(_config.EndEventCassieMessage, _config.EndEventCassieText);
+            Player.Died -= Plugin.Instance.eventHandlers.OnKillingPIE;
+            _pieStarted = false;
         }
     }
 }

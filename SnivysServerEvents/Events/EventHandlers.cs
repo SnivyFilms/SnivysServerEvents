@@ -1,15 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
 using MEC;
 using PlayerRoles;
+using PluginAPI.Events;
 using UnityEngine;
 using Random = System.Random;
 using Events = SnivysServerEvents.Events;
+
 // ReSharper disable InconsistentNaming
 
 namespace SnivysServerEvents.Events
@@ -29,26 +33,36 @@ namespace SnivysServerEvents.Events
         //Ending round
         public void OnEndingRound(RoundEndedEventArgs ev)
         {
-            Log.Debug("Checking if an event is active");
-            if (Plugin.ActiveEvent != 0)
-            {
-                Log.Debug("Disabling Event Handlers, Clearing Generator Count");
-                _activatedGenerators = 0;
-                BlackoutEventHandlers.EndEvent();
-                PeanutHydraEventHandlers.EndEvent();
-                PeanutInfectionEventHandlers.EndEvent();
-                VariableLightsEventHandlers.EndEvent();
-                ShortEventHandlers.EndEvent();
-                FreezingTemperaturesEventHandlers.EndEvent();
-                ChaoticEventHandlers.EndEvent();
-                Plugin.ActiveEvent = 0;
-            }
+            Log.Debug("Checking if an event is active at round end");
+            if (Plugin.ActiveEvent == 0) return;
+            Log.Debug("Disabling Event Handlers, Clearing Generator Count");
+            _activatedGenerators = 0;
+            BlackoutEventHandlers.EndEvent();
+            PeanutHydraEventHandlers.EndEvent();
+            PeanutInfectionEventHandlers.EndEvent();
+            VariableLightsEventHandlers.EndEvent();
+            ShortEventHandlers.EndEvent();
+            FreezingTemperaturesEventHandlers.EndEvent();
+            ChaoticEventHandlers.EndEvent();
+            Plugin.ActiveEvent = 0;
         }
-
-        /*public void OnRoundStarted()
+        
+        //Waiting for Players
+        public void OnWaitingForPlayers()
         {
-            throw new System.NotImplementedException();
-        }*/
+            Log.Debug("Checking if an event is active at waiting for players");
+            if (Plugin.ActiveEvent == 0) return;
+            Log.Debug("Disabling Event Handlers, Clearing Generator Count");
+            _activatedGenerators = 0;
+            BlackoutEventHandlers.EndEvent();
+            PeanutHydraEventHandlers.EndEvent();
+            PeanutInfectionEventHandlers.EndEvent();
+            VariableLightsEventHandlers.EndEvent();
+            ShortEventHandlers.EndEvent();
+            FreezingTemperaturesEventHandlers.EndEvent();
+            ChaoticEventHandlers.EndEvent();
+            Plugin.ActiveEvent = 0;
+        }
 
         
         //Blackout
@@ -66,7 +80,7 @@ namespace SnivysServerEvents.Events
             }
         }
         
-        // Peanut Hydra
+        // Peanut Infection
         public void OnKillingPIE(DiedEventArgs ev)
         {
             Log.Debug("Checking if the killer was 173");
@@ -133,6 +147,147 @@ namespace SnivysServerEvents.Events
             foreach (var player in Player.List)
             {
                 player.Scale = new Vector3(ShortEventHandlers.GetPlayerSize(), ShortEventHandlers.GetPlayerSize(), ShortEventHandlers.GetPlayerSize());
+            }
+        }
+        
+        //Chaos Event
+        public void OnUsingMedicalItemCE(UsingItemCompletedEventArgs ev)
+        {
+            if (ev.Usable.Type is ItemType.Adrenaline or ItemType.Painkillers or ItemType.Medkit or ItemType.SCP500)
+            {
+                Random random = new();
+                int chance = random.Next(minValue: 1, maxValue: 2);
+                if (chance == 1)
+                    return;
+                chance = random.Next(minValue: 1, maxValue: 41);
+                switch (chance)
+                {
+                    case 1:
+                        break;
+                    case 2:
+                        ev.Player.EnableEffect(EffectType.Asphyxiated, 1, random.Next());
+                        break;
+                    case 3:
+                        ev.Player.EnableEffect(EffectType.Bleeding, 1, random.Next());
+                        break;
+                    case 4:
+                        ev.Player.EnableEffect(EffectType.Blinded, 1, random.Next());
+                        break;
+                    case 5:
+                        ev.Player.EnableEffect(EffectType.Burned, 1, random.Next());
+                        break;
+                    case 6:
+                        ev.Player.EnableEffect(EffectType.Concussed, 1, random.Next());
+                        break;
+                    case 7:
+                        ev.Player.EnableEffect(EffectType.Corroding, 1, random.Next());
+                        break;
+                    case 8:
+                        ev.Player.EnableEffect(EffectType.Deafened, 1, random.Next());
+                        break;
+                    case 9:
+                        ev.Player.EnableEffect(EffectType.Decontaminating, 1, random.Next());
+                        break;
+                    case 10:
+                        ev.Player.EnableEffect(EffectType.Disabled, 1, random.Next());
+                        break;
+                    case 11:
+                        ev.Player.EnableEffect(EffectType.Ensnared, 1, random.Next());
+                        break;
+                    case 12:
+                        ev.Player.EnableEffect(EffectType.Exhausted, 1, random.Next());
+                        break;
+                    case 13:
+                        ev.Player.EnableEffect(EffectType.Flashed, 1, random.Next());
+                        break;
+                    case 14:
+                        ev.Player.EnableEffect(EffectType.Ghostly, 1, random.Next());
+                        break;
+                    case 15:
+                        ev.Player.EnableEffect(EffectType.Hemorrhage, 1, random.Next());
+                        break;
+                    case 16:
+                        ev.Player.EnableEffect(EffectType.Hypothermia, 1, random.Next());
+                        break;
+                    case 17:
+                        ev.Player.EnableEffect(EffectType.Invigorated, 1, random.Next());
+                        break;
+                    case 18:
+                        ev.Player.EnableEffect(EffectType.Invisible, 1, random.Next());
+                        break;
+                    case 19:
+                        ev.Player.EnableEffect(EffectType.Poisoned, 1, random.Next());
+                        break;
+                    case 20:
+                        ev.Player.EnableEffect(EffectType.Scp207, (byte)random.Next(minValue: 1, maxValue: 3), random.Next());
+                        break;
+                    case 21:
+                        ev.Player.EnableEffect(EffectType.Scp1853, 1, random.Next());
+                        break;
+                    case 22:
+                        ev.Player.EnableEffect(EffectType.Slowness, (byte)random.Next(minValue: 1, maxValue: 255), random.Next());
+                        break;
+                    case 23:
+                        ev.Player.EnableEffect(EffectType.Stained, 1, random.Next());
+                        break;
+                    case 24:
+                        ev.Player.EnableEffect(EffectType.Traumatized, 1, random.Next());
+                        break;
+                    case 25:
+                        ev.Player.EnableEffect(EffectType.Vitality, 1, random.Next());
+                        break;
+                    case 26:
+                        ev.Player.EnableEffect(EffectType.AmnesiaItems, 1, random.Next());
+                        break;
+                    case 27:
+                        ev.Player.EnableEffect(EffectType.AmnesiaVision, 1, random.Next());
+                        break;
+                    case 28:
+                        ev.Player.EnableEffect(EffectType.AntiScp207, (byte)random.Next(minValue: 1, maxValue:3), random.Next());
+                        break;
+                    case 29:
+                        ev.Player.EnableEffect(EffectType.BodyshotReduction, (byte)random.Next(minValue: 1, maxValue: 4), random.Next());
+                        break;
+                    case 30:
+                        ev.Player.EnableEffect(EffectType.CardiacArrest, 1, random.Next());
+                        break;
+                    case 31:
+                        ev.Player.EnableEffect(EffectType.DamageReduction, (byte)random.Next(minValue: 1, maxValue: 255), random.Next());
+                        break;
+                    case 32:
+                        ev.Player.EnableEffect(EffectType.FogControl, (byte)random.Next(minValue: 1, maxValue: 7), random.Next());
+                        break;
+                    case 33:
+                        ev.Player.EnableEffect(EffectType.MovementBoost, (byte)random.Next(minValue: 1, maxValue: 255), random.Next());
+                        break;
+                    case 34:
+                        ev.Player.EnableEffect(EffectType.PocketCorroding, 1, random.Next());
+                        break;
+                    case 35:
+                        ev.Player.EnableEffect(EffectType.RainbowTaste, (byte)random.Next(minValue: 1, maxValue: 3), random.Next());
+                        break;
+                    case 36:
+                        ev.Player.EnableEffect(EffectType.SeveredHands, 1, random.Next());
+                        break;
+                    case 37:
+                        ev.Player.EnableEffect(EffectType.SilentWalk, 1, random.Next());
+                        break;
+                    case 38:
+                        ev.Player.EnableEffect(EffectType.SinkHole, 1, random.Next());
+                        break;
+                    case 39:
+                        ev.Player.EnableEffect(EffectType.SpawnProtected, 1, random.Next());
+                        break;
+                    case 40:
+                        ExplosiveGrenade grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
+                        grenade.FuseTime = random.Next();
+                        grenade.SpawnActive(ev.Player.Position);
+                        break;
+                    case 41:
+                        ev.Player.Kill("You used a medical item unsafely");
+                        break;
+                }
+
             }
         }
     }

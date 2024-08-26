@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CommandSystem.Commands.RemoteAdmin.Inventory;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using MEC;
@@ -9,13 +8,12 @@ using SnivysServerEvents.Configs;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.CustomItems.API.Features;
-using Exiled.Events.Handlers;
 using PlayerRoles;
-using UnityEngine;
 using Cassie = Exiled.API.Features.Cassie;
 using Item = Exiled.API.Features.Items.Item;
 using Map = Exiled.API.Features.Map;
-using Player = Exiled.API.Features.Player;
+using PlayerAPI = Exiled.API.Features.Player;
+using PlayerEvent = Exiled.Events.Handlers.Player;
 using Random = System.Random;
 using Warhead = Exiled.API.Features.Warhead;
 
@@ -25,6 +23,7 @@ public class ChaoticEventHandlers
     private static CoroutineHandle _choaticHandle;
     private static ChatoicConfig _config;
     private static bool _ceStarted;
+    private static bool _ceMedicalItemEvent;
     public ChaoticEventHandlers()
     {
         _config = Plugin.Instance.Config.ChaoticConfig;
@@ -32,7 +31,7 @@ public class ChaoticEventHandlers
         Start();
     }
 
-    public void Start()
+    private static void Start()
     {
         _ceStarted = true;
         Map.ResetLightsColor();
@@ -40,7 +39,7 @@ public class ChaoticEventHandlers
         _choaticHandle = Timing.RunCoroutine(ChaoticTiming());
     }
 
-    public static IEnumerator<float> ChaoticTiming()
+    private static IEnumerator<float> ChaoticTiming()
     {
         Random random = new Random();
         if (!_ceStarted)
@@ -50,7 +49,7 @@ public class ChaoticEventHandlers
         }
         for (;;)
         {
-            int chaosRandomNumber = random.Next(minValue:1, maxValue:50);
+            int chaosRandomNumber = random.Next(minValue:1, maxValue:16);
             Log.Debug(chaosRandomNumber);
             if (_config.ChaosEventEndsOtherEvents)
             {
@@ -68,7 +67,7 @@ public class ChaoticEventHandlers
                     if (_config.ItemStealEvent)
                     {
                         Log.Debug("Item Steal Chaos Event is active, running code");
-                        foreach (Player player in Player.List)
+                        foreach (PlayerAPI player in PlayerAPI.List)
                         {
                             Log.Debug("Checking if players aren't a SCP or is dead");
                             if (player.Role.Team != Team.SCPs || player.Role.Team != Team.Dead)
@@ -91,7 +90,7 @@ public class ChaoticEventHandlers
                         Log.Debug("Getting a list of both standard items and custom items");
                         ItemType[] standardItems = Enum.GetValues(typeof(ItemType)).Cast<ItemType>().ToArray();
                         List<CustomItem> customItems = CustomItem.Registered.ToList();
-                        foreach (Player player in Player.List)
+                        foreach (PlayerAPI player in PlayerAPI.List)
                         {
                             Log.Debug("Checking if players aren't a SCP or is dead");
                             if (player.Role.Team != Team.SCPs || player.Role.Team != Team.Dead)
@@ -122,7 +121,7 @@ public class ChaoticEventHandlers
                     if (_config.RandomTeleportEvent)
                     {
                         Log.Debug("Random Teleport Event is active, running code");
-                        foreach (Player player in Player.List)
+                        foreach (PlayerAPI player in PlayerAPI.List)
                         {
                             if (!_config.TeleportToFacilityAfterNuke && Warhead.IsDetonated)
                             {
@@ -156,7 +155,7 @@ public class ChaoticEventHandlers
                             Log.Debug("Checking if the Warhead is locked, if not lock it");
                             if (!Warhead.IsLocked)
                                 Warhead.IsLocked = true;
-                            foreach (Player player in Player.List)
+                            foreach (PlayerAPI player in PlayerAPI.List)
                             {
                                 Log.Debug($"Displaying the fake autonuke start message to {player}");
                                 player.Broadcast(new Exiled.API.Features.Broadcast(_config.FakeAutoNukeStartText,
@@ -171,7 +170,7 @@ public class ChaoticEventHandlers
                             
                             Log.Debug("Time has been reached, stopping warhead");
                             Warhead.Stop();
-                            foreach (Player player in Player.List)
+                            foreach (PlayerAPI player in PlayerAPI.List)
                             {
                                 Log.Debug($"Displaying the fake out message to {player}");
                                 player.Broadcast(new Exiled.API.Features.Broadcast(_config.FakeAutoNukeFakeoutText,
@@ -188,7 +187,7 @@ public class ChaoticEventHandlers
                     if (_config.RemoveWeaponsEvent)
                     {
                         Log.Debug("Remove Weapons event is active, running code");
-                        foreach (Player player in Player.List)
+                        foreach (PlayerAPI player in PlayerAPI.List)
                         {
                             if (player.Role.Team != Team.SCPs || player.Role.Team != Team.Dead)
                             {
@@ -213,7 +212,7 @@ public class ChaoticEventHandlers
                     if (_config.GiveRandomWeaponsEvent)
                     {
                         Log.Debug("Giving random weapons is active, running code");
-                        foreach (Player player in Player.List)
+                        foreach (PlayerAPI player in PlayerAPI.List)
                         {
                             if (player.Role.Team != Team.SCPs || player.Role.Team != Team.Dead)
                             {
@@ -232,8 +231,24 @@ public class ChaoticEventHandlers
                                         }
                                         else
                                         {
-                                            Log.Debug($"Giving {player} a {randomWeapon}");
-                                            player.AddItem(randomWeapon);
+                                            if (_config.GiveAllRandomWeapons)
+                                            {
+                                                Log.Debug($"Giving {player} a random weapon");
+                                                player.AddItem(randomWeapon);
+                                            }
+                                            else if (_config.GiveRandomWeaponsDefined == null)
+                                            {
+                                                Log.Warn("VVE Chaos Event: GiveAllRandomWeapons is false but the GiveRandomWeaponsDefined is empty! Falling back to any random weapon.");
+                                                player.AddItem(randomWeapon);
+                                            }
+                                            else
+                                            {
+                                                Log.Debug($"Giving {player} a predefined weapon");
+                                                player.AddItem(
+                                                    _config.GiveRandomWeaponsDefined[
+                                                        random.Next(_config.GiveRandomWeaponsDefined.Count)]);
+                                            }
+
                                             player.Broadcast(new Exiled.API.Features.Broadcast(_config.GiveRandomWeaponsText,
                                                 (ushort)_config.BroadcastDisplayTime));
                                         }
@@ -249,8 +264,23 @@ public class ChaoticEventHandlers
                                     }
                                     else
                                     {
-                                        Log.Debug($"Giving {player} a {randomWeapon}");
-                                        player.AddItem(randomWeapon);
+                                        if (_config.GiveAllRandomWeapons)
+                                        {
+                                            Log.Debug($"Giving {player} a random weapon");
+                                            player.AddItem(randomWeapon);
+                                        }
+                                        else if (_config.GiveRandomWeaponsDefined == null)
+                                        {
+                                            Log.Warn("VVE Chaos Event: GiveAllRandomWeapons is false but the GiveRandomWeaponsDefined is empty! Falling back to any random weapon.");
+                                            player.AddItem(randomWeapon);
+                                        }
+                                        else
+                                        {
+                                            Log.Debug($"Giving {player} a predefined weapon");
+                                            player.AddItem(
+                                                _config.GiveRandomWeaponsDefined[
+                                                    random.Next(_config.GiveRandomWeaponsDefined.Count)]);
+                                        }
                                         player.Broadcast(new Exiled.API.Features.Broadcast(_config.GiveRandomWeaponsText,
                                             (ushort)_config.BroadcastDisplayTime));
                                     }
@@ -265,7 +295,7 @@ public class ChaoticEventHandlers
                     if (_config.DeathMatchEvent)
                     {
                         Log.Debug("Death Match Event is active, running code");
-                        foreach (Player player in Player.List)
+                        foreach (PlayerAPI player in PlayerAPI.List)
                         {
                             Log.Debug("Checking if SCPs should be affected");
                             if (!_config.DeathMatchEventAffectsSCPs)
@@ -351,11 +381,11 @@ public class ChaoticEventHandlers
                     {
                         Log.Debug("FBI Open Up Event active, running code");
                         Log.Debug("Getting a random non-foundation player");
-                        Player FBIOpenUpTarget = GetRandomPlayerFBI();
+                        PlayerAPI FBIOpenUpTarget = GetRandomPlayerFBI();
                         Log.Debug($"Showing {FBIOpenUpTarget} the warning message they are about to have the foundation teleport to them");
                         FBIOpenUpTarget.Broadcast(new Exiled.API.Features.Broadcast(_config.FBIOpenUpTargetText, (ushort)_config.BroadcastDisplayTime));
                         yield return Timing.WaitForSeconds(_config.FBITeleportTime);
-                        foreach (Player player in Player.List)
+                        foreach (PlayerAPI player in PlayerAPI.List)
                         {
                             if (player.Role.Team == Team.FoundationForces)
                             {
@@ -373,7 +403,7 @@ public class ChaoticEventHandlers
                     if (_config.GrenadeFeetEvent)
                     {
                         Log.Debug("Grenade Feet Event active, running code");
-                        foreach (Player player in Player.List)
+                        foreach (PlayerAPI player in PlayerAPI.List)
                         {
                             Log.Debug($"Grenade feet warning being shown to {player}");
                             player.Broadcast(new Exiled.API.Features.Broadcast(_config.GrenadeFeetText, (ushort) _config.BroadcastDisplayTime));
@@ -381,7 +411,7 @@ public class ChaoticEventHandlers
 
                         yield return Timing.WaitForSeconds(random.Next(minValue: 1, maxValue: 50));
 
-                        foreach (Player player in Player.List)
+                        foreach (PlayerAPI player in PlayerAPI.List)
                         {
                             Log.Debug($"Spawning a grenade on {player}");
                             ExplosiveGrenade grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
@@ -395,13 +425,49 @@ public class ChaoticEventHandlers
                     else
                         Log.Debug("Grenade Feet Event disabled");
                     break;
+                case 16:
+                    if (_config.UnsafeMedicalItemsEvent)
+                    {
+                        Log.Debug("Unsafe medical items event active, running code");
+                        Log.Debug("Activating Event Handlers for on using medical item");
+                        PlayerEvent.UsingItemCompleted += Plugin.Instance.eventHandlers.OnUsingMedicalItemCE;
+                        _ceMedicalItemEvent = true;
+                        foreach (PlayerAPI player in PlayerAPI.List)
+                        {
+                            if (player.Role.Team != Team.SCPs)
+                            {
+                                Log.Debug($"Displaying Unsafe Medical Items Warning to {player}");
+                                player.Broadcast(new Exiled.API.Features.Broadcast(_config.UnsafeMedicalItemsText,
+                                    (ushort)_config.BroadcastDisplayTime));
+                            }
+                        }
+                        if (_config.UnsafeMedicalItemsUseRandomTime)
+                            yield return Timing.WaitForSeconds(random.Next(minValue: 1, maxValue: 50));
+                        else
+                            yield return Timing.WaitForSeconds(_config.UnsafeMedicalItemsFixedTime);
+                        Log.Debug("Disabling Event Handlers for on using medical item events");
+                        PlayerEvent.UsingItemCompleted -= Plugin.Instance.eventHandlers.OnUsingMedicalItemCE;
+                        _ceMedicalItemEvent = false;
+                        foreach (PlayerAPI player in PlayerAPI.List)
+                        {
+                            if (player.Role.Team != Team.SCPs)
+                            {
+                                Log.Debug($"Displaying Unsafe Medical Items Warning to {player}");
+                                player.Broadcast(new Exiled.API.Features.Broadcast(_config.UnsafeMedicalItemsSafeToUseText,
+                                    (ushort)_config.BroadcastDisplayTime));
+                            }
+                        }
+                    }
+                    else
+                        Log.Debug("Unsafe medical Items Event disabled");
+                    break;
             }
             yield return Timing.WaitForSeconds(_config.TimeForChaosEvent);
         }
     }
-
+    
     private static readonly ItemType[] WeaponTypes =
-    {
+    [
         ItemType.GunA7,
         ItemType.GunCom45,
         ItemType.GunCrossvec,
@@ -418,15 +484,15 @@ public class ChaoticEventHandlers
         ItemType.ParticleDisruptor,
         ItemType.GrenadeFlash,
         ItemType.GrenadeHE
-    };
+    ];
     private static bool IsWeapon(Item item)
     {
         return WeaponTypes.Contains(item.Type);
     }
-    private static Player GetRandomPlayerFBI()
+    private static PlayerAPI GetRandomPlayerFBI()
     {
         Random random = new Random();
-        List<Player> fbiOpenUpPossibleTargets = Player.List.Where(p => p.Role != (RoleTypeId)Team.FoundationForces || p.Role != (RoleTypeId)Team.Scientists || p.Role != (RoleTypeId)Team.Dead).ToList();
+        List<PlayerAPI> fbiOpenUpPossibleTargets = PlayerAPI.List.Where(p => p.Role != (RoleTypeId)Team.FoundationForces || p.Role != (RoleTypeId)Team.Scientists || p.Role != (RoleTypeId)Team.Dead).ToList();
         if (fbiOpenUpPossibleTargets.Count == 0)
             return null;
         int index = random.Next(fbiOpenUpPossibleTargets.Count);
@@ -434,10 +500,11 @@ public class ChaoticEventHandlers
     }
     public static void EndEvent()
     {
-        if (_ceStarted)
-        {
-            _ceStarted = false;
-            Timing.KillCoroutines(_choaticHandle);
-        }
+        if (!_ceStarted) return;
+        _ceStarted = false;
+        Timing.KillCoroutines(_choaticHandle);
+        if (!_ceMedicalItemEvent) return;
+        PlayerEvent.UsingItemCompleted -= Plugin.Instance.eventHandlers.OnUsingMedicalItemCE;
+        _ceMedicalItemEvent = false;
     }
 }

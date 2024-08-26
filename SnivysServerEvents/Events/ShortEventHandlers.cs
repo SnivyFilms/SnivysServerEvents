@@ -16,7 +16,8 @@ namespace SnivysServerEvents.Events
             Exiled.Events.Handlers.Player.ChangingRole += Plugin.Instance.eventHandlers.OnRoleSwapSE;
             Start();
         }
-        public static void Start()
+
+        private static void Start()
         {
             _seStarted = true;
             foreach (var player in Player.List)
@@ -38,13 +39,11 @@ namespace SnivysServerEvents.Events
         }
         public static void EndEvent()
         {
-            if (_seStarted)
-            {
-                Cassie.MessageTranslated(_config.EndEventCassieMessage, _config.EndEventCassieText);
-                Log.Debug("Unregistering ChangingRole (SE) Event Handlers");
-                Exiled.Events.Handlers.Player.ChangingRole -= Plugin.Instance.eventHandlers.OnRoleSwapSE;
-                _seStarted = false;
-            }
+            if (!_seStarted) return;
+            Cassie.MessageTranslated(_config.EndEventCassieMessage, _config.EndEventCassieText);
+            Log.Debug("Unregistering ChangingRole (SE) Event Handlers");
+            Exiled.Events.Handlers.Player.ChangingRole -= Plugin.Instance.eventHandlers.OnRoleSwapSE;
+            _seStarted = false;
         }
     }
 }

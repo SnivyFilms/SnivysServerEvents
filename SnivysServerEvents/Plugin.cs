@@ -21,14 +21,16 @@ namespace SnivysServerEvents
         {
             Instance = this;
             eventHandlers = new EventHandlers(this);
-            //Server.RoundStarted += eventHandlers.OnRoundStarted;
             Server.RoundEnded += eventHandlers.OnEndingRound;
+            Server.WaitingForPlayers += eventHandlers.OnWaitingForPlayers;
             base.OnEnabled();
         }
 
         public override void OnDisabled()
         {
             Instance = null;
+            Server.RoundEnded -= eventHandlers.OnEndingRound;
+            Server.WaitingForPlayers -= eventHandlers.OnWaitingForPlayers;
             eventHandlers = null;
             base.OnDisabled();
         }

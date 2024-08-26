@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using JetBrains.Annotations;
 
 namespace SnivysServerEvents.Configs;
 
@@ -70,6 +72,18 @@ public class ChatoicConfig
     [Description("What should the broadcast say if the player's inventory is full and cannot recieve a weapon")]
     public string GiveRandomWeaponsTextFail { get; set; } = "No free weaponry for you, bawomp";
 
+    [Description("Should all weapons be up for grabs?")]
+    public bool GiveAllRandomWeapons { get; set; } = true;
+
+    [Description("If giving all weapons is false, what weapons can be given?")]
+    [CanBeNull]
+    public List<ItemType> GiveRandomWeaponsDefined { get; set; } = new List<ItemType>()
+    {
+        ItemType.GunCOM15,
+        ItemType.GunCOM18,
+        ItemType.GunCrossvec
+    };
+
     [Description("Should the death match event be active?")]
     public bool DeathMatchEvent { get; set; } = true;
 
@@ -110,4 +124,19 @@ public class ChatoicConfig
 
     [Description("What should the broadcast be before the grenades drop on people?")]
     public string GrenadeFeetText { get; set; } = "You might want to be careful on where you step";
+
+    [Description("Should unsafe medical items event be active?")]
+    public bool UnsafeMedicalItemsEvent { get; set; } = true;
+
+    [Description("What should the broadcast be for unsafe medical items?")]
+    public string UnsafeMedicalItemsText { get; set; } = "Use medical items with care";
+
+    [Description("Should unsafe medical items use a random time for the event?")]
+    public bool UnsafeMedicalItemsUseRandomTime { get; set; } = true;
+
+    [Description("If random time for the event is off, how long should Unsafe Medical Items run for?")]
+    public float UnsafeMedicalItemsFixedTime { get; set; } = 30f;
+
+    [Description("What should the broadcast be to inform players it's safe to use medical items again?")]
+    public string UnsafeMedicalItemsSafeToUseText { get; set; } = "It's safe to use medical items again";
 }

@@ -19,7 +19,7 @@ namespace SnivysServerEvents.Events
             Start();
         }
 
-        public static void Start()
+        private static void Start()
         {
             _pheStarted = true;
             Cassie.MessageTranslated(Config.StartEventCassieMessage, Config.StartEventCassieText);
