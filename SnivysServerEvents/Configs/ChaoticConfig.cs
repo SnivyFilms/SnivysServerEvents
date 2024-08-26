@@ -6,8 +6,8 @@ namespace SnivysServerEvents.Configs;
 
 public class ChaoticConfig
 {
-    public string StartEventCassieMessage { get; set; } = "Facility Power Surge Detected";
-    public string StartEventCassieText { get; set; } = "Facility Power Surge Detected (Lights variable event)";
+    public string StartEventCassieMessage { get; set; } = "Facility is unstable";
+    public string StartEventCassieText { get; set; } = "Facility is unstable (Chaos Event)";
     
     [Description("Determines how long before the next chaos event (in seconds)")]
     public float TimeForChaosEvent { get; set; } = 60;
