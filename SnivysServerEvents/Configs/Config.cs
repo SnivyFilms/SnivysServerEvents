@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.IO;
 using Exiled.API.Interfaces;
 
 namespace SnivysServerEvents.Configs
@@ -13,11 +14,11 @@ namespace SnivysServerEvents.Configs
         
         //Independent Event Configs
         public BlackoutConfig BlackoutConfig { get; set; } = new();
+        public ChaoticConfig ChaoticConfig { get; set; } = new();
+        public FreezingTemperaturesConfig FreezingTemperaturesConfig { get; set; } = new();
         public PeanutInfectionConfig PeanutInfectionConfig { get; set; } = new();
         public PeanutHydraConfig PeanutHydraConfig { get; set; } = new();
-        public VariableLightsConfig VariableLightsConfig { get; set; } = new();
         public ShortConfig ShortConfig { get; set; } = new();
-        public FreezingTemperaturesConfig FreezingTemperaturesConfig { get; set; } = new();
-        public ChaoticConfig ChaoticConfig { get; set; } = new();
+        public VariableLightsConfig VariableLightsConfig { get; set; } = new();
     }
 }

@@ -31,10 +31,9 @@ public class ChaoticEventHandlers
         Start();
     }
 
-    private static void Start()
+    private void Start()
     {
         _ceStarted = true;
-        Map.ResetLightsColor();
         Cassie.MessageTranslated(_config.StartEventCassieMessage, _config.StartEventCassieText);
         _choaticHandle = Timing.RunCoroutine(ChaoticTiming());
     }
