@@ -18,6 +18,7 @@ namespace SnivysServerEvents.Commands
                         try
                         {
                                 RegisterCommand(new BlackoutCommand());
+                                RegisterCommand(new ChaoticCommand());
                                 RegisterCommand(new FreezingTemperaturesCommand());
                                 RegisterCommand(new PeanutHydraCommand());
                                 RegisterCommand(new PeanutInfectionCommand());
