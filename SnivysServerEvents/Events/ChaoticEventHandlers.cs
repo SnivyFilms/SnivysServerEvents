@@ -21,7 +21,7 @@ namespace SnivysServerEvents.Events;
 public class ChaoticEventHandlers
 {
     private static CoroutineHandle _choaticHandle;
-    private static ChatoicConfig _config;
+    private static ChaoticConfig _config;
     private static bool _ceStarted;
     private static bool _ceMedicalItemEvent;
     public ChaoticEventHandlers()

@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 namespace SnivysServerEvents.Configs;
 
-public class ChatoicConfig
+public class ChaoticConfig
 {
     public string StartEventCassieMessage { get; set; } = "Facility Power Surge Detected";
     public string StartEventCassieText { get; set; } = "Facility Power Surge Detected (Lights variable event)";
