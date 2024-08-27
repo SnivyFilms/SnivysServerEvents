@@ -8,9 +8,13 @@ Currently the events part of the plugin is provided below
 - SCP 173 Hydra (when 173 dies, they respawn with another player both as 173, which are smaller)
 - Variable Lights
 - Short Players Event
+- Chaos Event
+- Name Redacted Event
+- Freezing Temperatures Event
 
 Exiled Permission: vvevents.run
-RA Commands: VVE_Blackout, VVE_SCP-173_Infection, VVE_SCP-173_Hydra, VVE_Variable_Lights, VVE_Short
+RA Command: vve
+RA Sub Commands: Blackout, Chaotic, FreezingTemps, NameRedacted, 173Hydra, 173Infection, ShortPeople, VariableLights
 
 Feel free to fork and contribute to this plugin.
 
