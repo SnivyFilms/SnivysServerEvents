@@ -44,6 +44,7 @@ namespace SnivysServerEvents.Events
             Log.Debug("Unregistering ChangingRole (SE) Event Handlers");
             Exiled.Events.Handlers.Player.ChangingRole -= Plugin.Instance.eventHandlers.OnRoleSwapSE;
             _seStarted = false;
+            Plugin.ActiveEvent -= 1;
         }
     }
 }

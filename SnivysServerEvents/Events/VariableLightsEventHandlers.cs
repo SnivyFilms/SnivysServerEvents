@@ -38,24 +38,36 @@ public class VariableLightsEventHandlers
         }
         for (;;)
         {
-            float aRandomNumber = (float)random.NextDouble();
-            Log.Debug(aRandomNumber);
-            Log.Debug(_config.ColorChanging);
             if (!_config.ColorChanging)
             {
-                foreach (Room room in Room.List)
-                    room.Color = new Color(aRandomNumber, aRandomNumber, aRandomNumber, aRandomNumber);
+                if (_config.DifferentLightsPerRoom)
+                    foreach (Room room in Room.List)
+                        room.Color = new Color((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble(),(float)random.NextDouble());
+                else
+                {
+                    float aRandomNumber = (float)random.NextDouble();
+                    foreach (Room room in Room.List)
+                        room.Color = new Color(aRandomNumber, aRandomNumber, aRandomNumber, aRandomNumber);
+                }
             }
             else
             {
-                float rRandomNumber = (float)random.NextDouble();
-                Log.Debug(rRandomNumber);
-                float gRandomNumber = (float)random.NextDouble();
-                Log.Debug(gRandomNumber);
-                float bRandomNumber = (float)random.NextDouble();
-                Log.Debug(bRandomNumber);
-                foreach (Room room in Room.List)
-                    room.Color = new Color(rRandomNumber, gRandomNumber, bRandomNumber, aRandomNumber);
+                if (_config.DifferentLightsPerRoom)
+                    foreach (Room room in Room.List)
+                        room.Color = new Color((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble());
+                else
+                {
+                    float aRandomNumber = (float)random.NextDouble();
+                    Log.Debug(aRandomNumber);
+                    float rRandomNumber = (float)random.NextDouble();
+                    Log.Debug(rRandomNumber);
+                    float gRandomNumber = (float)random.NextDouble();
+                    Log.Debug(gRandomNumber);
+                    float bRandomNumber = (float)random.NextDouble();
+                    Log.Debug(bRandomNumber);
+                    foreach (Room room in Room.List)
+                        room.Color = new Color(rRandomNumber, gRandomNumber, bRandomNumber, aRandomNumber);
+                }
             }
             yield return Timing.WaitForSeconds(_config.TimeForChange);
         }
@@ -66,5 +78,6 @@ public class VariableLightsEventHandlers
         _vleStarted = false;
         Timing.KillCoroutines(_lightChangingHandle);
         Map.ResetLightsColor();
+        Plugin.ActiveEvent -= 1;
     }
 }

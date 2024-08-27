@@ -12,4 +12,7 @@ public class VariableLightsConfig
 
     [Description("Should the lights only brighten and dim or allow for color changing too")]
     public bool ColorChanging { get; set; } = false;
+
+    [Description("Should the lights be the same for each room, or be different for each room?")]
+    public bool DifferentLightsPerRoom { get; set; } = true;
 }

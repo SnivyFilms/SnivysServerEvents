@@ -91,6 +91,7 @@
     <Compile Include="Commands\ChaoticCommand.cs" />
     <Compile Include="Commands\FreezingTemperaturesCommand.cs" />
     <Compile Include="Commands\MainCommand.cs" />
+    <Compile Include="Commands\NameRedactedCommand.cs" />
     <Compile Include="Commands\PeanutHydraCommand.cs" />
     <Compile Include="Commands\PeanutInfectionCommand.cs" />
     <Compile Include="Commands\ShortCommand.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Configs\ChaoticConfig.cs" />
     <Compile Include="Configs\Config.cs" />
     <Compile Include="Configs\FreezingTemperaturesConfig.cs" />
+    <Compile Include="Configs\NameRedactedConfig.cs" />
     <Compile Include="Configs\PeanutInfectionConfig.cs" />
     <Compile Include="Configs\PeanutHydraConfig.cs" />
     <Compile Include="Configs\ShortConfig.cs" />
@@ -107,6 +109,7 @@
     <Compile Include="Events\ChaoticEventHandlers.cs" />
     <Compile Include="Events\EventHandlers.cs" />
     <Compile Include="Events\FreezingTemperaturesEventHandlers.cs" />
+    <Compile Include="Events\NameRedactedEventHandlers.cs" />
     <Compile Include="Events\PeanutInfectionEventHandlers.cs" />
     <Compile Include="Events\PeanutHydraEventHandlers.cs" />
     <Compile Include="Events\ShortEventHandlers.cs" />

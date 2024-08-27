@@ -31,6 +31,7 @@ namespace SnivysServerEvents.Events
             Player.Dying += Plugin.Instance.eventHandlers.OnDyingPHE;
             Player.Died -= Plugin.Instance.eventHandlers.OnDiedPHE;
             _pheStarted = false;
+            Plugin.ActiveEvent -= 1;
         }
     }
 }

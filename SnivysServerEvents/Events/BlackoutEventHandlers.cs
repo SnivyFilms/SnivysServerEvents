@@ -42,6 +42,7 @@ namespace SnivysServerEvents.Events
             }
             Map.TurnOffAllLights(1);
             _boeStarted = false;
+            Plugin.ActiveEvent -= 1;
         }
     }
 }

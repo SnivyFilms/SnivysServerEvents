@@ -44,6 +44,7 @@ namespace SnivysServerEvents.Events
             ShortEventHandlers.EndEvent();
             FreezingTemperaturesEventHandlers.EndEvent();
             ChaoticEventHandlers.EndEvent();
+            NameRedactedEventHandlers.EndEvent();
             Plugin.ActiveEvent = 0;
         }
         
@@ -61,6 +62,7 @@ namespace SnivysServerEvents.Events
             ShortEventHandlers.EndEvent();
             FreezingTemperaturesEventHandlers.EndEvent();
             ChaoticEventHandlers.EndEvent();
+            NameRedactedEventHandlers.EndEvent();
             Plugin.ActiveEvent = 0;
         }
 

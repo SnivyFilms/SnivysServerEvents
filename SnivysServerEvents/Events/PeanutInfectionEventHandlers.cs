@@ -29,6 +29,7 @@ namespace SnivysServerEvents.Events
             Cassie.MessageTranslated(_config.EndEventCassieMessage, _config.EndEventCassieText);
             Player.Died -= Plugin.Instance.eventHandlers.OnKillingPIE;
             _pieStarted = false;
+            Plugin.ActiveEvent -= 1;
         }
     }
 }

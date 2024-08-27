@@ -163,7 +163,7 @@ public class FreezingTemperaturesEventHandlers
     {
         if (!_fteStarted) return;
         _fteStarted = false;
+        Plugin.ActiveEvent -= 1;
         Timing.KillCoroutines(_freezingTemperaturesHandle);
-        Map.ResetLightsColor();
     }
 }

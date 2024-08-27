@@ -59,6 +59,7 @@ public class ChaoticEventHandlers
                 PeanutInfectionEventHandlers.EndEvent();
                 ShortEventHandlers.EndEvent();
                 VariableLightsEventHandlers.EndEvent();
+                NameRedactedEventHandlers.EndEvent();
             }
             switch (chaosRandomNumber)
             {
@@ -472,6 +473,15 @@ public class ChaoticEventHandlers
                     else
                         Log.Debug("Unsafe medical Items Event disabled");
                     break;
+                case 17:
+                    if (_config.ChaosEventEnablesOtherEvents)
+                    {
+                        Log.Debug("Chaos Event Enables other Events true, running Name Redacted Event");
+                        var nameRedactedHandlers = new NameRedactedEventHandlers();
+                    }
+                    else
+                        Log.Debug("Chaos Event enabling other events is disabled");
+                    break;
             }
             yield return Timing.WaitForSeconds(_config.TimeForChaosEvent);
         }
@@ -514,6 +524,7 @@ public class ChaoticEventHandlers
         if (!_ceStarted) return;
         _ceStarted = false;
         Timing.KillCoroutines(_choaticHandle);
+        Plugin.ActiveEvent -= 1;
         if (!_ceMedicalItemEvent) return;
         PlayerEvent.UsingItemCompleted -= Plugin.Instance.eventHandlers.OnUsingMedicalItemCE;
         _ceMedicalItemEvent = false;
