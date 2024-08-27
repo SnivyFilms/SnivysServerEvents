@@ -96,20 +96,32 @@ public class ChaoticEventHandlers
                             {
                                 int randomItemGiveRng = random.Next(minValue: 1, maxValue: 2);
                                 Log.Debug($"Deciding if {player} gets a Custom Item or a Regular Item");
-                                switch (randomItemGiveRng)
+                                if (_config.GiveRandomItemCustomitems)
                                 {
-                                    case 1:
-                                        CustomItem randomCustomItem = customItems[random.Next(customItems.Count)];
-                                        randomCustomItem.Give(player);
-                                        Log.Debug($"{player} has received custom item id {randomCustomItem}");
-                                        break;
-                                    case 2:
-                                        ItemType randomStandardItem = standardItems[random.Next(standardItems.Length)];
-                                        player.AddItem(randomStandardItem);
-                                        Log.Debug($"{player} has received item id {randomStandardItem}");
-                                        break;
+
+                                    switch (randomItemGiveRng)
+                                    {
+                                        case 1:
+                                            CustomItem randomCustomItem = customItems[random.Next(customItems.Count)];
+                                            randomCustomItem.Give(player);
+                                            Log.Debug($"{player} has received custom item id {randomCustomItem}");
+                                            break;
+                                        case 2:
+                                            ItemType randomStandardItem =
+                                                standardItems[random.Next(standardItems.Length)];
+                                            player.AddItem(randomStandardItem);
+                                            Log.Debug($"{player} has received item id {randomStandardItem}");
+                                            break;
+                                    }
                                 }
-                                player.Broadcast(new Exiled.API.Features.Broadcast(_config.GiveRandomItemText, (ushort)_config.BroadcastDisplayTime));
+                                else
+                                {
+                                    ItemType randomStandardItem =
+                                        standardItems[random.Next(standardItems.Length)];
+                                    player.AddItem(randomStandardItem);
+                                }
+                                player.Broadcast(new Exiled.API.Features.Broadcast(_config.GiveRandomItemText,
+                                    (ushort)_config.BroadcastDisplayTime));
                             }
                         }
                     }

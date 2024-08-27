@@ -26,6 +26,9 @@ public class ChaoticConfig
     [Description("What should the broadcast say when an item is given")]
     public string GiveRandomItemText { get; set; } = "It has appears that you have obtained an item";
 
+    [Description("Should random items only be regular items or use custom items as well?")]
+    public bool GiveRandomItemCustomitems { get; set; } = false;
+
     [Description("Should random teleport chaos event run?")]
     public bool RandomTeleportEvent { get; set; } = true;
 
