@@ -556,6 +556,7 @@ public class ChaoticEventHandlers
         if (_ceFakeWarheadEvent)
         {
             Timing.KillCoroutines(_fakeWarheadHandle);
+            _ceFakeWarheadEvent = false;
         }
     }
 }
