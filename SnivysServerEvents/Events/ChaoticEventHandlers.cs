@@ -21,9 +21,12 @@ namespace SnivysServerEvents.Events;
 public class ChaoticEventHandlers
 {
     private static CoroutineHandle _choaticHandle;
+    private static CoroutineHandle _fakeWarheadHandle;
     private static ChaoticConfig _config;
     private static bool _ceStarted;
     private static bool _ceMedicalItemEvent;
+    private static bool _ceFakeWarheadEvent;
+    private static float _previousWarheadTime;
     public ChaoticEventHandlers()
     {
         _config = Plugin.Instance.Config.ChaoticConfig;
@@ -162,6 +165,9 @@ public class ChaoticEventHandlers
                         Log.Debug("Fake auto nuke event is active, running code");
                         if (!Warhead.IsDetonated || !Warhead.IsInProgress)
                         {
+                            _ceFakeWarheadEvent = true;
+                            Log.Debug("Saving previous warhead time in the event of the nuke being activated before the fake auto nuke");
+                            _previousWarheadTime = Warhead.RealDetonationTimer;
                             Log.Debug("Starting warhead");
                             Warhead.Start();
                             Log.Debug("Checking if the Warhead is locked, if not lock it");
@@ -174,20 +180,8 @@ public class ChaoticEventHandlers
                                     (ushort)_config.BroadcastDisplayTime));
                             }
 
-                            while (Warhead.RealDetonationTimer > _config.FakeAutoNukeTimeOut)
-                            {
-                                Log.Debug($"Warhead time hasn't reached {_config.FakeAutoNukeTimeOut} yet. Waiting half a second and checking again");
-                                yield return Timing.WaitForSeconds(0.5f);
-                            }
-                            
-                            Log.Debug("Time has been reached, stopping warhead");
-                            Warhead.Stop();
-                            foreach (PlayerAPI player in PlayerAPI.List)
-                            {
-                                Log.Debug($"Displaying the fake out message to {player}");
-                                player.Broadcast(new Exiled.API.Features.Broadcast(_config.FakeAutoNukeFakeoutText,
-                                    (ushort)_config.BroadcastDisplayTime));
-                            }
+                            Log.Debug("Starting a Coroutine to track warhead timing");
+                            _fakeWarheadHandle = Timing.RunCoroutine(WarheadTiming());
                         }
                         else
                             Log.Debug("Warhead is either detonated or is in progress, not running this event");
@@ -486,7 +480,36 @@ public class ChaoticEventHandlers
             yield return Timing.WaitForSeconds(_config.TimeForChaosEvent);
         }
     }
-    
+
+    private static IEnumerator<float> WarheadTiming()
+    {
+        for (;;)
+        {
+            if (Warhead.DetonationTimer > _config.FakeAutoNukeTimeOut)
+            {
+                Log.Debug(
+                    $"Warhead time hasn't reached {_config.FakeAutoNukeTimeOut} yet. Waiting half a second and checking again");
+                Log.Debug($"Detonation Time is {Warhead.DetonationTimer}");
+            }
+            else
+            {
+                Log.Debug("Time has been reached, stopping warhead");
+                Warhead.IsLocked = false;
+                Warhead.DetonationTimer = _previousWarheadTime;
+                Warhead.Stop();
+                foreach (PlayerAPI player in PlayerAPI.List)
+                {
+                    Log.Debug($"Displaying the fake out message to {player}");
+                    player.Broadcast(new Exiled.API.Features.Broadcast(_config.FakeAutoNukeFakeoutText,
+                        (ushort)_config.BroadcastDisplayTime));
+                }
+
+                _ceFakeWarheadEvent = false;
+                yield break;
+            }
+            yield return Timing.WaitForSeconds(0.5f);
+        }
+    }
     private static readonly ItemType[] WeaponTypes =
     [
         ItemType.GunA7,
@@ -525,8 +548,14 @@ public class ChaoticEventHandlers
         _ceStarted = false;
         Timing.KillCoroutines(_choaticHandle);
         Plugin.ActiveEvent -= 1;
-        if (!_ceMedicalItemEvent) return;
-        PlayerEvent.UsingItemCompleted -= Plugin.Instance.eventHandlers.OnUsingMedicalItemCE;
-        _ceMedicalItemEvent = false;
+        if (_ceMedicalItemEvent)
+        {
+            PlayerEvent.UsingItemCompleted -= Plugin.Instance.eventHandlers.OnUsingMedicalItemCE;
+            _ceMedicalItemEvent = false;
+        }
+        if (_ceFakeWarheadEvent)
+        {
+            Timing.KillCoroutines(_fakeWarheadHandle);
+        }
     }
 }
