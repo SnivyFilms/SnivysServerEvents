@@ -190,7 +190,8 @@ public class ChaoticEventHandlers
                         {
                             _ceFakeWarheadEvent = true;
                             Log.Debug("Saving previous warhead time in the event of the nuke being activated before the fake auto nuke");
-                            _previousWarheadTime = Warhead.RealDetonationTimer;
+                            if(_config.FakeAutoNukeRestoresOldTime)
+                                _previousWarheadTime = Warhead.RealDetonationTimer;
                             Log.Debug("Starting warhead");
                             Warhead.Start();
                             Log.Debug("Checking if the Warhead is locked, if not lock it");
@@ -879,7 +880,8 @@ public class ChaoticEventHandlers
             {
                 Log.Debug("Time has been reached, stopping warhead");
                 Warhead.IsLocked = false;
-                Warhead.DetonationTimer = _previousWarheadTime;
+                if (_config.FakeAutoNukeRestoresOldTime)
+                    Warhead.DetonationTimer = _previousWarheadTime;
                 Warhead.Stop();
                 foreach (PlayerAPI player in PlayerAPI.List)
                 {
