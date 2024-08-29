@@ -142,4 +142,54 @@ public class ChaoticConfig
 
     [Description("What should the broadcast be to inform players it's safe to use medical items again?")]
     public string UnsafeMedicalItemsSafeToUseText { get; set; } = "It's safe to use medical items again";
+
+    [Description("Should fakeout announcements for respawn waves run?")]
+    public bool FakeoutRespawnAnnouncementsEvent { get; set; } = true;
+
+    [Description("Should fakeout announcements for MTF be used?")]
+    public bool FakeoutRespawnAnnouncementsMTFAllow { get; set; } = true;
+
+    [Description("Should fakeout announcements for Chaos Insurgency be used?")]
+    public bool FakeoutRespawnAnnouncementsChaosAllow { get; set; } = false;
+
+    [Description("Should fakeout announcements for Serpents Hand be used?")]
+    public bool FakeoutRespawnAnnouncementsSerpentsAllow { get; set; } = false;
+
+    [Description("Should fakeout announcements for UIU be used?")]
+    public bool FakeoutRespawnAnnouncementsUIUAllow { get; set; } = false;
+
+    [Description("Should the MTF announcement be used as a fall back if other fakeouts are disabled")]
+    public bool FakeoutRespawnAnnouncementsMTFFallback { get; set; } = false;
+
+    [Description("What should the fakeout cassie announcement say for MTF")]
+    public string FakeoutRespawnAnnouncementsMTFAliveSCPSCassie { get; set; } = "MTFUnit epsilon 11 designated {designation} hasentered AwaitingRecontainment {scpnum}";
+    
+    public string FakeoutRespawnAnnouncementsMTFSCPSDeadCassie { get; set; } = "MTFUnit epsilon 11 designated {designation} hasentered NoSCPsLeft";
+
+    [Description("What should the fakeout cassie text say for MTF")]
+    public string FakeoutRespawnAnnouncementsMTFAliveSCPSCassieText { get; set; } = "Mobile Task Force Unit Espilon 11, designated {designation} has entered the facility. All remaining personnel are advised to proceed with standard evacuation protocols until a MTF squad reaches your destination. awaiting recontainment of {scpnum}.";
+
+    public string FakeoutRespawnAnnouncementsMTFSCPSDeadCassieText { get; set; } = "Mobile Task Force Unit Espilon 11, designated {designation} has entered the facility. All remaining personnel are advised to proceed with standard evacuation protocols until a MTF squad reaches your destination. Substantial threat remains within the facility - exercise caution.";
+
+    [Description("What should the fakeout cassie announcement say for Chaos")]
+    public string FakeoutRespawnAnnouncementsChaosCassie { get; set; } = "Warning . Military Personnel has entered the facility . Designated as, Chaos Insurgency.";
+
+    [Description("What should the fakeout cassie text say for Chaos")]
+    public string FakeoutRespawnAnnouncementsChaosCassieText { get; set; } = "Warning. Military Personnel has entered the facility. Designated as, <color=green>Chaos Insurgency</color>.";
+
+    [Description("What should the fakeout cassie announcement say for Serpents")]
+    public string FakeoutRespawnAnnouncementsSerpentsCassie { get; set; } = "Serpents Hand hasentered";
+
+    [Description("What should the fakeout cassie text say for Serpents")]
+    public string FakeoutRespawnAnnouncementsSerpentsCassieText { get; set; } = "Serpents Hand has entered the facility";
+    
+    [Description("What should the fakeout cassie announcement say for UIU")]
+    public string FakeoutRespawnAnnouncementsUIUAliveSCPSCassie { get; set; } = "The U I U Squad designated {designation} HasEntered AllRemaining AwaitingRecontainment {scpnum}";
+
+    public string FakeoutRespawnAnnouncementsUIUSCPSDeadCassie { get; set; } = "The U I U Squad designated {designation} HasEntered AllRemaining NoSCPsLeft";
+
+    [Description("What should the fakeout cassie text say for UIU")]
+    public string FakeoutRespawnAnnouncementsUIUAliveSCPSCassieText { get; set; } = "The UIU Squad, designated {designation} has entered the facility. Awaiting recontainment of {scpnum}";
+    
+    public string FakeoutRespawnAnnouncementsUIUSCPSDeadCassieText { get; set; } = "The UIU Squad, designated {designation} has entered the facility. Substantial threat remains within the facility - exercise caution.";
 }

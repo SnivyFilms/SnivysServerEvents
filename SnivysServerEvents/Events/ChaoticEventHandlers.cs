@@ -51,7 +51,7 @@ public class ChaoticEventHandlers
         }
         for (;;)
         {
-            int chaosRandomNumber = random.Next(minValue:1, maxValue:16);
+            int chaosRandomNumber = random.Next(minValue:1, maxValue:18);
             Log.Debug(chaosRandomNumber);
             if (_config.ChaosEventEndsOtherEvents)
             {
@@ -476,6 +476,243 @@ public class ChaoticEventHandlers
                     else
                         Log.Debug("Chaos Event enabling other events is disabled");
                     break;
+                case 18:
+                    if (_config.FakeoutRespawnAnnouncementsEvent)
+                    {
+                        Log.Debug("Fakeout Respawn Announcements active, running code");
+                        float fakeoutRespawnRandom = random.Next(minValue:1, maxValue:4);
+                        string cassieMessage = string.Empty;
+                        string cassieText = string.Empty;
+                        int scpCount = 0;
+                        switch (fakeoutRespawnRandom)
+                        {
+                            case 1:
+                                if (_config.FakeoutRespawnAnnouncementsMTFAllow)
+                                {
+                                    foreach (Player player in Player.List)
+                                    {
+                                        if (player.Role.Team == Team.SCPs)
+                                            scpCount++;
+                                    }
+
+                                    if (scpCount == 0)
+                                    {
+                                        cassieMessage = _config.FakeoutRespawnAnnouncementsMTFSCPSDeadCassie;
+                                        cassieText = _config.FakeoutRespawnAnnouncementsMTFSCPSDeadCassieText;
+                                        int randomNatoLetter = random.Next(minValue: 1, maxValue: 26);
+                                        int randomNatoNumber = random.Next(minValue: 2, maxValue: 20);
+                                        cassieMessage = cassieMessage.Replace("{designation}", $"nato_{GetNatoLetter(randomNatoLetter)} {randomNatoNumber}");
+                                        cassieText = cassieText.Replace("{designation}", GetNatoName(randomNatoLetter) + " " + random.Next(randomNatoNumber));
+                                        Cassie.MessageTranslated(cassieMessage, cassieText);
+                                    }
+                                    else
+                                    {
+                                        cassieMessage = _config.FakeoutRespawnAnnouncementsMTFAliveSCPSCassie;
+                                        cassieText = _config.FakeoutRespawnAnnouncementsMTFAliveSCPSCassieText;
+                                        if (scpCount == 1)
+                                        {
+                                            cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
+                                            cassieText = cassieText.Replace("{scpnum}", $"{scpCount} SCP subject");
+                                        }
+                                        else
+                                        {
+                                            cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
+                                            cassieText = cassieText.Replace("{scpnum}", $"{scpCount} SCP subject");
+                                            cassieMessage = cassieMessage.Replace("scpsubject", "scpsubjects");
+                                            cassieText = cassieText.Replace("SCP subject", "SCP subjects");
+                                        }
+
+                                        int randomNatoLetter = random.Next(minValue: 1, maxValue: 26);
+                                        int randomNatoNumber = random.Next(minValue: 2, maxValue: 20);
+                                        cassieMessage = cassieMessage.Replace("{designation}", $"nato_{GetNatoLetter(randomNatoLetter)} {randomNatoNumber}");
+                                        cassieText = cassieText.Replace("{designation}", GetNatoName(randomNatoLetter) + " " + random.Next(randomNatoNumber));
+                                        Cassie.MessageTranslated(cassieMessage, cassieText);
+                                    }
+                                }
+                                break;
+                            case 2:
+                                if (_config.FakeoutRespawnAnnouncementsUIUAllow)
+                                {
+                                    foreach (Player player in Player.List)
+                                    {
+                                        if (player.Role.Team == Team.SCPs)
+                                            scpCount++;
+                                    }
+
+                                    if (scpCount == 0)
+                                    {
+                                        cassieMessage = _config.FakeoutRespawnAnnouncementsUIUSCPSDeadCassie;
+                                        cassieText = _config.FakeoutRespawnAnnouncementsUIUSCPSDeadCassieText;
+                                        int randomNatoLetter = random.Next(minValue: 1, maxValue: 26);
+                                        int randomNatoNumber = random.Next(minValue: 2, maxValue: 20);
+                                        cassieMessage = cassieMessage.Replace("{designation}", $"nato_{GetNatoLetter(randomNatoLetter)} {randomNatoNumber}");
+                                        cassieText = cassieText.Replace("{designation}", GetNatoName(randomNatoLetter) + " " + random.Next(randomNatoNumber));
+                                        Cassie.MessageTranslated(cassieMessage, cassieText);
+                                    }
+                                    else
+                                    {
+                                        cassieMessage = _config.FakeoutRespawnAnnouncementsUIUAliveSCPSCassie;
+                                        cassieText = _config.FakeoutRespawnAnnouncementsUIUAliveSCPSCassieText;
+                                        if (scpCount == 1)
+                                        {
+                                            cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
+                                            cassieText = cassieText.Replace("{scpnum}", $"{scpCount} SCP subject");
+                                        }
+                                        else
+                                        {
+                                            cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
+                                            cassieText = cassieText.Replace("{scpnum}", $"{scpCount} SCP subject");
+                                            cassieMessage = cassieMessage.Replace("scpsubject", "scpsubjects");
+                                            cassieText = cassieText.Replace("SCP subject", "SCP subjects");
+                                        }
+
+                                        int randomNatoLetter = random.Next(minValue: 1, maxValue: 26);
+                                        int randomNatoNumber = random.Next(minValue: 2, maxValue: 20);
+                                        cassieMessage = cassieMessage.Replace("{designation}", $"nato_{GetNatoLetter(randomNatoLetter)} {randomNatoNumber}");
+                                        cassieText = cassieText.Replace("{designation}", GetNatoName(randomNatoLetter) + " " + random.Next(randomNatoNumber));
+                                        Cassie.MessageTranslated(cassieMessage, cassieText);
+                                    }
+                                }
+                                else if (_config.FakeoutRespawnAnnouncementsMTFFallback)
+                                {
+                                    foreach (Player player in Player.List)
+                                    {
+                                        if (player.Role.Team == Team.SCPs)
+                                            scpCount++;
+                                    }
+
+                                    if (scpCount == 0)
+                                    {
+                                        cassieMessage = _config.FakeoutRespawnAnnouncementsUIUSCPSDeadCassie;
+                                        cassieText = _config.FakeoutRespawnAnnouncementsUIUSCPSDeadCassieText;
+                                        int randomNatoLetter = random.Next(minValue: 1, maxValue: 26);
+                                        int randomNatoNumber = random.Next(minValue: 2, maxValue: 20);
+                                        cassieMessage = cassieMessage.Replace("{designation}", $"nato_{GetNatoLetter(randomNatoLetter)} {randomNatoNumber}");
+                                        cassieText = cassieText.Replace("{designation}", GetNatoName(randomNatoLetter) + " " + random.Next(randomNatoNumber));
+                                        Cassie.MessageTranslated(cassieMessage, cassieText);
+                                    }
+                                    else
+                                    {
+                                        cassieMessage = _config.FakeoutRespawnAnnouncementsUIUAliveSCPSCassie;
+                                        cassieText = _config.FakeoutRespawnAnnouncementsUIUAliveSCPSCassieText;
+                                        if (scpCount == 1)
+                                        {
+                                            cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
+                                            cassieText = cassieText.Replace("{scpnum}", $"{scpCount} SCP subject");
+                                        }
+                                        else
+                                        {
+                                            cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
+                                            cassieText = cassieText.Replace("{scpnum}", $"{scpCount} SCP subject");
+                                            cassieMessage = cassieMessage.Replace("scpsubject", "scpsubjects");
+                                            cassieText = cassieText.Replace("SCP subject", "SCP subjects");
+                                        }
+
+                                        int randomNatoLetter = random.Next(minValue: 1, maxValue: 26);
+                                        int randomNatoNumber = random.Next(minValue: 2, maxValue: 20);
+                                        cassieMessage = cassieMessage.Replace("{designation}", $"nato_{GetNatoLetter(randomNatoLetter)} {randomNatoNumber}");
+                                        cassieText = cassieText.Replace("{designation}", GetNatoName(randomNatoLetter) + " " + random.Next(randomNatoNumber));
+                                        Cassie.MessageTranslated(cassieMessage, cassieText);
+                                    }
+                                }
+                                break;
+                            case 3:
+                                if (_config.FakeoutRespawnAnnouncementsChaosAllow)
+                                    Cassie.MessageTranslated(_config.FakeoutRespawnAnnouncementsChaosCassie, _config.FakeoutRespawnAnnouncementsChaosCassieText);
+                                else if (_config.FakeoutRespawnAnnouncementsMTFFallback)
+                                {
+                                    foreach (Player player in Player.List)
+                                    {
+                                        if (player.Role.Team == Team.SCPs)
+                                            scpCount++;
+                                    }
+
+                                    if (scpCount == 0)
+                                    {
+                                        cassieMessage = _config.FakeoutRespawnAnnouncementsUIUSCPSDeadCassie;
+                                        cassieText = _config.FakeoutRespawnAnnouncementsUIUSCPSDeadCassieText;
+                                        int randomNatoLetter = random.Next(minValue: 1, maxValue: 26);
+                                        int randomNatoNumber = random.Next(minValue: 2, maxValue: 20);
+                                        cassieMessage = cassieMessage.Replace("{designation}", $"nato_{GetNatoLetter(randomNatoLetter)} {randomNatoNumber}");
+                                        cassieText = cassieText.Replace("{designation}", GetNatoName(randomNatoLetter) + " " + random.Next(randomNatoNumber));
+                                        Cassie.MessageTranslated(cassieMessage, cassieText);
+                                    }
+                                    else
+                                    {
+                                        cassieMessage = _config.FakeoutRespawnAnnouncementsUIUAliveSCPSCassie;
+                                        cassieText = _config.FakeoutRespawnAnnouncementsUIUAliveSCPSCassieText;
+                                        if (scpCount == 1)
+                                        {
+                                            cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
+                                            cassieText = cassieText.Replace("{scpnum}", $"{scpCount} SCP subject");
+                                        }
+                                        else
+                                        {
+                                            cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
+                                            cassieText = cassieText.Replace("{scpnum}", $"{scpCount} SCP subject");
+                                            cassieMessage = cassieMessage.Replace("scpsubject", "scpsubjects");
+                                            cassieText = cassieText.Replace("SCP subject", "SCP subjects");
+                                        }
+
+                                        int randomNatoLetter = random.Next(minValue: 1, maxValue: 26);
+                                        int randomNatoNumber = random.Next(minValue: 2, maxValue: 20);
+                                        cassieMessage = cassieMessage.Replace("{designation}", $"nato_{GetNatoLetter(randomNatoLetter)} {randomNatoNumber}");
+                                        cassieText = cassieText.Replace("{designation}", GetNatoName(randomNatoLetter) + " " + random.Next(randomNatoNumber));
+                                        Cassie.MessageTranslated(cassieMessage, cassieText);
+                                    }
+                                }
+                                break;
+                            case 4:
+                                if(_config.FakeoutRespawnAnnouncementsSerpentsAllow)
+                                    Cassie.MessageTranslated(_config.FakeoutRespawnAnnouncementsSerpentsCassie, _config.FakeoutRespawnAnnouncementsSerpentsCassieText);
+                                else if (_config.FakeoutRespawnAnnouncementsMTFFallback)
+                                {
+                                    foreach (Player player in Player.List)
+                                    {
+                                        if (player.Role.Team == Team.SCPs)
+                                            scpCount++;
+                                    }
+
+                                    if (scpCount == 0)
+                                    {
+                                        cassieMessage = _config.FakeoutRespawnAnnouncementsUIUSCPSDeadCassie;
+                                        cassieText = _config.FakeoutRespawnAnnouncementsUIUSCPSDeadCassieText;
+                                        int randomNatoLetter = random.Next(minValue: 1, maxValue: 26);
+                                        int randomNatoNumber = random.Next(minValue: 2, maxValue: 20);
+                                        cassieMessage = cassieMessage.Replace("{designation}", $"nato_{GetNatoLetter(randomNatoLetter)} {randomNatoNumber}");
+                                        cassieText = cassieText.Replace("{designation}", GetNatoName(randomNatoLetter) + " " + random.Next(randomNatoNumber));
+                                        Cassie.MessageTranslated(cassieMessage, cassieText);
+                                    }
+                                    else
+                                    {
+                                        cassieMessage = _config.FakeoutRespawnAnnouncementsUIUAliveSCPSCassie;
+                                        cassieText = _config.FakeoutRespawnAnnouncementsUIUAliveSCPSCassieText;
+                                        if (scpCount == 1)
+                                        {
+                                            cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
+                                            cassieText = cassieText.Replace("{scpnum}", $"{scpCount} SCP subject");
+                                        }
+                                        else
+                                        {
+                                            cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
+                                            cassieText = cassieText.Replace("{scpnum}", $"{scpCount} SCP subject");
+                                            cassieMessage = cassieMessage.Replace("scpsubject", "scpsubjects");
+                                            cassieText = cassieText.Replace("SCP subject", "SCP subjects");
+                                        }
+
+                                        int randomNatoLetter = random.Next(minValue: 1, maxValue: 26);
+                                        int randomNatoNumber = random.Next(minValue: 2, maxValue: 20);
+                                        cassieMessage = cassieMessage.Replace("{designation}", $"nato_{GetNatoLetter(randomNatoLetter)} {randomNatoNumber}");
+                                        cassieText = cassieText.Replace("{designation}", GetNatoName(randomNatoLetter) + " " + random.Next(randomNatoNumber));
+                                        Cassie.MessageTranslated(cassieMessage, cassieText);
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                    else
+                        Log.Debug("Fakeout Respawn Announcements disabled");
+                    break;
             }
             yield return Timing.WaitForSeconds(_config.TimeForChaosEvent);
         }
@@ -542,6 +779,74 @@ public class ChaoticEventHandlers
         int index = random.Next(fbiOpenUpPossibleTargets.Count);
         return fbiOpenUpPossibleTargets[index];
     }
+    private static string GetNatoName(int randomUnit)
+    {
+        Dictionary<int, string> natoAlphabet = new Dictionary<int, string>()
+        {
+            {1, "ALPHA"},
+            {2, "BRAVO"},
+            {3, "CHARLIE"},
+            {4, "DELTA"},
+            {5, "ECHO"},
+            {6, "FOXTROT"},
+            {7, "GOLF"},
+            {8, "HOTEL"},
+            {9, "INDIA"},
+            {10, "JULIET"},
+            {11, "KILO"},
+            {12, "LIMA"},
+            {13, "MIKE"},
+            {14, "NOVEMBER"},
+            {15, "OSCAR"},
+            {16, "PAPA"},
+            {17, "QUEBEC"},
+            {18, "ROMEO"},
+            {19, "SIERRA"},
+            {20, "TANGO"},
+            {21, "UNIFORM"},
+            {22, "VICTOR"},
+            {23, "WHISKEY"},
+            {24, "XRAY"},
+            {25, "YANKEE"},
+            {26, "ZULU" },
+        };
+        return natoAlphabet[randomUnit];
+    }
+
+    private static string GetNatoLetter(int randomUnit)
+    {
+        Dictionary<int, string> natoLetter = new Dictionary<int, string>()
+        {
+            { 1, "A" },
+            { 2, "B" },
+            { 3, "C" },
+            { 4, "D" },
+            { 5, "E" },
+            { 6, "F" },
+            { 7, "G" },
+            { 8, "H" },
+            { 9, "I" },
+            { 10, "J" },
+            { 11, "K" },
+            { 12, "L" },
+            { 13, "M" },
+            { 14, "N" },
+            { 15, "O" },
+            { 16, "P" },
+            { 17, "Q" },
+            { 18, "R" },
+            { 19, "S" },
+            { 20, "T" },
+            { 21, "U" },
+            { 22, "V" },
+            { 23, "W" },
+            { 24, "X" },
+            { 25, "Y" },
+            { 26, "Z" },
+        };
+        return natoLetter[randomUnit];
+    }
+
     public static void EndEvent()
     {
         if (!_ceStarted) return;
