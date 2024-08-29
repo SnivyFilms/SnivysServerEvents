@@ -1,4 +1,5 @@
-﻿using SnivysServerEvents.Configs;
+﻿using System.Collections.Generic;
+using SnivysServerEvents.Configs;
 using Exiled.API.Features;
 
 namespace SnivysServerEvents.Events
@@ -22,11 +23,12 @@ namespace SnivysServerEvents.Events
             _seStarted = true;
             foreach (var player in Player.List)
             {
-                player.AddItem(ItemType.KeycardJanitor);
-                Log.Debug($"Added a Janitor Keycard to {player}");
-                //To Do:
-                //Configurable Adding Item
-                //player.AddItem(_config.StartingItem);
+                var startingItems = GetStartingItems(_config.StartingItems);
+                foreach (var item in startingItems)
+                {
+                    Log.Debug($"Adding {item} to {player}");
+                    player.AddItem(item);
+                }
                 player.Scale = new UnityEngine.Vector3(GetPlayerSize(), GetPlayerSize(), GetPlayerSize());
                 Log.Debug($"Set {player} size to {GetPlayerSize()}");
             }
@@ -36,6 +38,11 @@ namespace SnivysServerEvents.Events
         public static float GetPlayerSize()
         {
             return _config.PlayerSize;
+        }
+
+        private static List<ItemType> GetStartingItems(List<ItemType> items)
+        {
+            return items;
         }
         public static void EndEvent()
         {

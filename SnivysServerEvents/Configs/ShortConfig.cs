@@ -15,10 +15,10 @@ namespace SnivysServerEvents.Configs
         [Description("Determines how small each player is")]
         public float PlayerSize { get; set; } = 0.25f;
 
-        /*[Description("What item does the players start with?")]
-        public List<string> StartingItem { get; set; } = new()
+        [Description("What item does the players start with?")]
+        public List<ItemType> StartingItems { get; set; } = new()
         {
-            $"{ItemType.KeycardJanitor}"
-        };*/
+            ItemType.KeycardJanitor
+        };
     }
 }
