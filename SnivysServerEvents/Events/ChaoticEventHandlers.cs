@@ -45,12 +45,10 @@ public class ChaoticEventHandlers
     {
         Random random = new Random();
         if (!_ceStarted)
-        {
-            Map.ResetLightsColor();
             yield break;
-        }
         for (;;)
         {
+            float chaoticEventCycle = _config.TimeForChaosEvent;
             int chaosRandomNumber = random.Next(minValue:1, maxValue:18);
             Log.Debug(chaosRandomNumber);
             if (_config.ChaosEventEndsOtherEvents)
@@ -66,6 +64,7 @@ public class ChaoticEventHandlers
             }
             switch (chaosRandomNumber)
             {
+                // Item Steal
                 case 1:
                     if (_config.ItemStealEvent)
                     {
@@ -83,9 +82,16 @@ public class ChaoticEventHandlers
                             }
                         }
                     }
+                    
                     else
+                    {
+                        if (_config.ChaoticEventRerollIfASpecificEventIsDisabled)
+                            chaoticEventCycle = 1;
                         Log.Debug("Item Steal Chaos Event disabled");
+                    }
+
                     break;
+                // Give Random Item
                 case 2:
                     if (_config.GiveRandomItemEvent)
                     {
@@ -118,6 +124,7 @@ public class ChaoticEventHandlers
                                             break;
                                     }
                                 }
+                                
                                 else
                                 {
                                     ItemType randomStandardItem =
@@ -129,9 +136,16 @@ public class ChaoticEventHandlers
                             }
                         }
                     }
+                    
                     else
+                    {
+                        if (_config.ChaoticEventRerollIfASpecificEventIsDisabled)
+                            chaoticEventCycle = 1;
                         Log.Debug("Give Random Item Event is disabled.");
+                    }
+
                     break;
+                // Random Teleport
                 case 3:
                     if (_config.RandomTeleportEvent)
                     {
@@ -143,11 +157,13 @@ public class ChaoticEventHandlers
                                 Log.Debug($"Warhead has been detonated, teleporting {player} somewhere on Surface");
                                 player.Teleport(Room.List.Where(r => r.Type is RoomType.Surface).GetRandomValue());
                             }
+                            
                             else if (!_config.TeleportToLightAfterDecom && Map.DecontaminationState == DecontaminationState.Finish)
                             { 
                                 Log.Debug($"Light has been decontaminated, teleporting {player} somewhere else in the facility");
                                 player.Teleport(Room.List.Where(r => r.Zone is not ZoneType.LightContainment).GetRandomValue());
                             }
+                            
                             else
                             {
                                 Log.Debug($"Teleporting {player} randomly into the facility");
@@ -156,9 +172,16 @@ public class ChaoticEventHandlers
                             player.Broadcast(new Exiled.API.Features.Broadcast(_config.RandomTeleportText, (ushort)_config.BroadcastDisplayTime));
                         }
                     }
+                    
                     else
+                    {
+                        if (_config.ChaoticEventRerollIfASpecificEventIsDisabled)
+                            chaoticEventCycle = 1;
                         Log.Debug("Random Teleport Event is disabled");
+                    }
+
                     break;
+                // Fake Auto Nuke
                 case 4:
                     if (_config.FakeAutoNuke)
                     {
@@ -186,9 +209,16 @@ public class ChaoticEventHandlers
                         else
                             Log.Debug("Warhead is either detonated or is in progress, not running this event");
                     }
+                    
                     else
+                    {
+                        if (_config.ChaoticEventRerollIfASpecificEventIsDisabled)
+                            chaoticEventCycle = 1;
                         Log.Debug("Fake auto nuke event is disabled");
+                    }
+
                     break;
+                // Remove Weapons
                 case 5:
                     if (_config.RemoveWeaponsEvent)
                     {
@@ -211,9 +241,16 @@ public class ChaoticEventHandlers
                             }
                         }
                     }
+                    
                     else
+                    {
+                        if (_config.ChaoticEventRerollIfASpecificEventIsDisabled)
+                            chaoticEventCycle = 1;
                         Log.Debug("Remove Weapons Event is disabled");
+                    }
+
                     break;
+                // Give Weapons
                 case 6:
                     if (_config.GiveRandomWeaponsEvent)
                     {
@@ -235,6 +272,7 @@ public class ChaoticEventHandlers
                                             player.Broadcast(new Exiled.API.Features.Broadcast(_config.GiveRandomWeaponsTextFail,
                                                 (ushort)_config.BroadcastDisplayTime));
                                         }
+                                        
                                         else
                                         {
                                             if (_config.GiveAllRandomWeapons)
@@ -242,11 +280,13 @@ public class ChaoticEventHandlers
                                                 Log.Debug($"Giving {player} a random weapon");
                                                 player.AddItem(randomWeapon);
                                             }
+                                            
                                             else if (_config.GiveRandomWeaponsDefined == null)
                                             {
                                                 Log.Warn("VVE Chaos Event: GiveAllRandomWeapons is false but the GiveRandomWeaponsDefined is empty! Falling back to any random weapon.");
                                                 player.AddItem(randomWeapon);
                                             }
+                                            
                                             else
                                             {
                                                 Log.Debug($"Giving {player} a predefined weapon");
@@ -260,6 +300,7 @@ public class ChaoticEventHandlers
                                         }
                                     }
                                 }
+                                
                                 else
                                 {
                                     if (player.IsInventoryFull)
@@ -268,6 +309,7 @@ public class ChaoticEventHandlers
                                         player.Broadcast(new Exiled.API.Features.Broadcast(_config.GiveRandomWeaponsTextFail,
                                             (ushort)_config.BroadcastDisplayTime));
                                     }
+                                    
                                     else
                                     {
                                         if (_config.GiveAllRandomWeapons)
@@ -275,11 +317,13 @@ public class ChaoticEventHandlers
                                             Log.Debug($"Giving {player} a random weapon");
                                             player.AddItem(randomWeapon);
                                         }
+                                        
                                         else if (_config.GiveRandomWeaponsDefined == null)
                                         {
                                             Log.Warn("VVE Chaos Event: GiveAllRandomWeapons is false but the GiveRandomWeaponsDefined is empty! Falling back to any random weapon.");
                                             player.AddItem(randomWeapon);
                                         }
+                                        
                                         else
                                         {
                                             Log.Debug($"Giving {player} a predefined weapon");
@@ -294,9 +338,16 @@ public class ChaoticEventHandlers
                             }
                         }
                     }
+                    
                     else
+                    {
+                        if (_config.ChaoticEventRerollIfASpecificEventIsDisabled)
+                            chaoticEventCycle = 1;
                         Log.Debug("Giving random weapons event is disabled");
+                    }
+
                     break;
+                // Death Match
                 case 7:
                     if (_config.DeathMatchEvent)
                     {
@@ -315,6 +366,7 @@ public class ChaoticEventHandlers
                                         (ushort)_config.BroadcastDisplayTime));
                                 }
                             }
+                            
                             else
                             {
                                 Log.Debug("SCPs are affected");
@@ -325,63 +377,112 @@ public class ChaoticEventHandlers
                             }
                         }
                     }
+                    
                     else
+                    {
+                        if (_config.ChaoticEventRerollIfASpecificEventIsDisabled)
+                            chaoticEventCycle = 1;
                         Log.Debug("Death Match Event is disabled");
+                    }
+
                     break;
+                // Blackout
                 case 8:
                     if (_config.ChaosEventEnablesOtherEvents)
                     {
                         Log.Debug("Chaos Event Enables other Events true, running Blackout Event");
                         var blackoutEventHandlers = new BlackoutEventHandlers();
                     }
+                    
                     else
+                    {
+                        if (_config.ChaoticEventRerollIfASpecificEventIsDisabled)
+                            chaoticEventCycle = 1;
                         Log.Debug("Chaos Event enabling other events is disabled");
+                    }
+
                     break;
+                // Freezing Temperatures
                 case 9:
                     if (_config.ChaosEventEnablesOtherEvents)
                     {
                         Log.Debug("Chaos Event Enables other Events true, running Freezing Temperature Event");
                         var freezingTemperaturesEventHandlers = new FreezingTemperaturesEventHandlers();
                     }
+                    
                     else
+                    {
+                        if (_config.ChaoticEventRerollIfASpecificEventIsDisabled)
+                            chaoticEventCycle = 1;
                         Log.Debug("Chaos Event enabling other events is disabled");
+                    }
+
                     break;
+                // Peanut Hydra
                 case 10:
                     if (_config.ChaosEventEnablesOtherEvents)
                     {
                         Log.Debug("Chaos Event Enables other Events true, running Peanut Hydra Event");
                         var peanutHydraEventHandlers = new PeanutHydraEventHandlers();
                     }
+                    
                     else
+                    {
+                        if (_config.ChaoticEventRerollIfASpecificEventIsDisabled)
+                            chaoticEventCycle = 1;
                         Log.Debug("Chaos Event enabling other events is disabled");
+                    }
+
                     break;
+                // Peanut Infection
                 case 11:
                     if (_config.ChaosEventEnablesOtherEvents)
                     {
                         Log.Debug("Chaos Event Enables other Events true, running Peanut Infection Event");
                         var peanutInfectionEventHandlers = new PeanutInfectionEventHandlers();
                     }
+                    
                     else
+                    {
+                        if (_config.ChaoticEventRerollIfASpecificEventIsDisabled)
+                            chaoticEventCycle = 1;
                         Log.Debug("Chaos Event enabling other events is disabled");
+                    }
+
                     break;
+                // Short People Event
                 case 12:
                     if (_config.ChaosEventEnablesOtherEvents)
                     {
                         Log.Debug("Chaos Event Enables other Events true, running Short People Event");
                         var shortEventHandlers = new ShortEventHandlers();
                     }
+                    
                     else
+                    {
+                        if (_config.ChaoticEventRerollIfASpecificEventIsDisabled)
+                            chaoticEventCycle = 1;
                         Log.Debug("Chaos Event enabling other events is disabled");
+                    }
+
                     break;
+                // Variable Lights
                 case 13:
                     if (_config.ChaosEventEnablesOtherEvents)
                     {
                         Log.Debug("Chaos Event Enables other Events true, running Variable Lights Event");
                         var variableLightsEvent = new VariableLightsEventHandlers();
                     }
+                    
                     else
+                    {
+                        if (_config.ChaoticEventRerollIfASpecificEventIsDisabled)
+                            chaoticEventCycle = 1;
                         Log.Debug("Chaos Event enabling other events is disabled");
+                    }
+
                     break;
+                // FBI Open Up Event
                 case 14:
                     if (_config.FBIOpenUpEvent)
                     {
@@ -402,9 +503,16 @@ public class ChaoticEventHandlers
                             }
                         }
                     }
+                    
                     else
+                    {
+                        if (_config.ChaoticEventRerollIfASpecificEventIsDisabled)
+                            chaoticEventCycle = 1;
                         Log.Debug("FBI Open Up Event disabled");
+                    }
+
                     break;
+                // Grenade Feet
                 case 15:
                     if (_config.GrenadeFeetEvent)
                     {
@@ -428,9 +536,16 @@ public class ChaoticEventHandlers
                             grenade.SpawnActive(player.Position);
                         }
                     }
+                    
                     else
+                    {
+                        if (_config.ChaoticEventRerollIfASpecificEventIsDisabled)
+                            chaoticEventCycle = 1;
                         Log.Debug("Grenade Feet Event disabled");
+                    }
+
                     break;
+                // Unsafe Medical Items
                 case 16:
                     if (_config.UnsafeMedicalItemsEvent)
                     {
@@ -465,17 +580,30 @@ public class ChaoticEventHandlers
                         }
                     }
                     else
+                    {
+                        if (_config.ChaoticEventRerollIfASpecificEventIsDisabled)
+                            chaoticEventCycle = 1;
                         Log.Debug("Unsafe medical Items Event disabled");
+                    }
+
                     break;
+                // Name Redacted
                 case 17:
                     if (_config.ChaosEventEnablesOtherEvents)
                     {
                         Log.Debug("Chaos Event Enables other Events true, running Name Redacted Event");
                         var nameRedactedHandlers = new NameRedactedEventHandlers();
                     }
+                    
                     else
+                    {
+                        if (_config.ChaoticEventRerollIfASpecificEventIsDisabled)
+                            chaoticEventCycle = 1;
                         Log.Debug("Chaos Event enabling other events is disabled");
+                    }
+
                     break;
+                // Fakeout Respawn Announcements
                 case 18:
                     if (_config.FakeoutRespawnAnnouncementsEvent)
                     {
@@ -529,7 +657,9 @@ public class ChaoticEventHandlers
                                         Cassie.MessageTranslated(cassieMessage, cassieText);
                                     }
                                 }
+                                
                                 break;
+                            
                             case 2:
                                 if (_config.FakeoutRespawnAnnouncementsUIUAllow)
                                 {
@@ -591,6 +721,7 @@ public class ChaoticEventHandlers
                                         cassieText = cassieText.Replace("{designation}", GetNatoName(randomNatoLetter) + " " + random.Next(randomNatoNumber));
                                         Cassie.MessageTranslated(cassieMessage, cassieText);
                                     }
+                                    
                                     else
                                     {
                                         cassieMessage = _config.FakeoutRespawnAnnouncementsUIUAliveSCPSCassie;
@@ -600,6 +731,7 @@ public class ChaoticEventHandlers
                                             cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
                                             cassieText = cassieText.Replace("{scpnum}", $"{scpCount} SCP subject");
                                         }
+                                        
                                         else
                                         {
                                             cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
@@ -615,7 +747,9 @@ public class ChaoticEventHandlers
                                         Cassie.MessageTranslated(cassieMessage, cassieText);
                                     }
                                 }
+                                
                                 break;
+                            
                             case 3:
                                 if (_config.FakeoutRespawnAnnouncementsChaosAllow)
                                     Cassie.MessageTranslated(_config.FakeoutRespawnAnnouncementsChaosCassie, _config.FakeoutRespawnAnnouncementsChaosCassieText);
@@ -637,6 +771,7 @@ public class ChaoticEventHandlers
                                         cassieText = cassieText.Replace("{designation}", GetNatoName(randomNatoLetter) + " " + random.Next(randomNatoNumber));
                                         Cassie.MessageTranslated(cassieMessage, cassieText);
                                     }
+                                    
                                     else
                                     {
                                         cassieMessage = _config.FakeoutRespawnAnnouncementsUIUAliveSCPSCassie;
@@ -646,6 +781,7 @@ public class ChaoticEventHandlers
                                             cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
                                             cassieText = cassieText.Replace("{scpnum}", $"{scpCount} SCP subject");
                                         }
+                                        
                                         else
                                         {
                                             cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
@@ -661,7 +797,9 @@ public class ChaoticEventHandlers
                                         Cassie.MessageTranslated(cassieMessage, cassieText);
                                     }
                                 }
+                                
                                 break;
+                            
                             case 4:
                                 if(_config.FakeoutRespawnAnnouncementsSerpentsAllow)
                                     Cassie.MessageTranslated(_config.FakeoutRespawnAnnouncementsSerpentsCassie, _config.FakeoutRespawnAnnouncementsSerpentsCassieText);
@@ -683,6 +821,7 @@ public class ChaoticEventHandlers
                                         cassieText = cassieText.Replace("{designation}", GetNatoName(randomNatoLetter) + " " + random.Next(randomNatoNumber));
                                         Cassie.MessageTranslated(cassieMessage, cassieText);
                                     }
+                                    
                                     else
                                     {
                                         cassieMessage = _config.FakeoutRespawnAnnouncementsUIUAliveSCPSCassie;
@@ -692,6 +831,7 @@ public class ChaoticEventHandlers
                                             cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
                                             cassieText = cassieText.Replace("{scpnum}", $"{scpCount} SCP subject");
                                         }
+                                        
                                         else
                                         {
                                             cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
@@ -707,14 +847,21 @@ public class ChaoticEventHandlers
                                         Cassie.MessageTranslated(cassieMessage, cassieText);
                                     }
                                 }
+                                
                                 break;
                         }
                     }
+                    
                     else
+                    {
+                        if (_config.ChaoticEventRerollIfASpecificEventIsDisabled)
+                            chaoticEventCycle = 1;
                         Log.Debug("Fakeout Respawn Announcements disabled");
+                    }
+
                     break;
             }
-            yield return Timing.WaitForSeconds(_config.TimeForChaosEvent);
+            yield return Timing.WaitForSeconds(chaoticEventCycle);
         }
     }
 

@@ -11,6 +11,9 @@ public class ChaoticConfig
     
     [Description("Determines how long before the next chaos event (in seconds)")]
     public float TimeForChaosEvent { get; set; } = 60;
+
+    [Description("Should the Chaotic Event reroll if a specific event is disabled?")]
+    public bool ChaoticEventRerollIfASpecificEventIsDisabled { get; set; } = true;
     
     [Description("The time for Broadcasts to be shown on the screen (this applies to all broadcasts that the Chaotic Event uses)")] 
     public float BroadcastDisplayTime { get; set; } = 10;
