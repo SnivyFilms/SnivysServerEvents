@@ -8,7 +8,6 @@ using SnivysServerEvents.Configs;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.CustomItems.API.Features;
-using Exiled.Events.EventArgs.Player;
 using PlayerRoles;
 using Cassie = Exiled.API.Features.Cassie;
 using Item = Exiled.API.Features.Items.Item;
@@ -16,6 +15,7 @@ using Map = Exiled.API.Features.Map;
 using PlayerAPI = Exiled.API.Features.Player;
 using PlayerEvent = Exiled.Events.Handlers.Player;
 using Random = System.Random;
+using Tesla = Exiled.API.Features.TeslaGate;
 using Warhead = Exiled.API.Features.Warhead;
 
 namespace SnivysServerEvents.Events;
@@ -927,21 +927,27 @@ public class ChaoticEventHandlers
         float modifiedTriggerRange = 0;
         float modifiedCooldownTime = 0;
         
-        foreach (Exiled.API.Features.TeslaGate teslaGate in Exiled.API.Features.TeslaGate.List)
+        foreach (Tesla teslaGate in Tesla.List)
         {
             regularActivationTime = teslaGate.ActivationTime;
             regularCooldownTime = teslaGate.CooldownTime;
             regularTriggerRange = teslaGate.TriggerRange;
             regularIdleRange = teslaGate.IdleRange;
+            
             Log.Debug($"{teslaGate.ActivationTime}, {teslaGate.TriggerRange}, {teslaGate.CooldownTime}, {teslaGate.IdleRange}");
+            
             teslaGate.ActivationTime = _config.RapidFireTeslaEventActivationTime;
-            modifiedActivationTime = teslaGate.ActivationTime;
             teslaGate.IdleRange = _config.RapidFireTeslaEventIdleRange;
-            modifiedIdleRange = teslaGate.IdleRange;
             teslaGate.TriggerRange = _config.RapidFireTeslaEventTriggerRange;
-            modifiedTriggerRange = teslaGate.TriggerRange;
             teslaGate.CooldownTime = _config.RapidFireTeslaEventCooldownTime;
-            modifiedCooldownTime = teslaGate.CooldownTime;
+            
+            if (Plugin.Instance.Config.Debug)
+            {
+                modifiedActivationTime = teslaGate.ActivationTime;
+                modifiedIdleRange = teslaGate.IdleRange;
+                modifiedTriggerRange = teslaGate.TriggerRange;
+                modifiedCooldownTime = teslaGate.CooldownTime;
+            }
         }
             
         for (;;)
@@ -958,7 +964,7 @@ public class ChaoticEventHandlers
             {
                 Log.Debug("Time threshold has been reached, ending event");
                 _ceRapidFireTelsas = false;
-                foreach (Exiled.API.Features.TeslaGate teslaGate in Exiled.API.Features.TeslaGate.List)
+                foreach (Tesla teslaGate in Tesla.List)
                 {
                     teslaGate.ActivationTime = regularActivationTime;
                     teslaGate.IdleRange = regularIdleRange;
