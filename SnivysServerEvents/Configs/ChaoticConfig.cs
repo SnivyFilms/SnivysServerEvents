@@ -203,17 +203,17 @@ public class ChaoticConfig
     public bool RapidFireTelsaEvent { get; set; } = true;
 
     [Description("How long should this event last for in seconds?")]
-    public float RapidFireTeslaEventTiming = 30f;
+    public float RapidFireTeslaEventTiming { get; set; } = 30f;
 
     [Description("What is the Rapid Fire Tesla Activation Time?")]
-    public float RapidFireTeslaEventActivationTime = 0.1f;
+    public float RapidFireTeslaEventActivationTime { get; set; } = 0.1f;
 
     [Description("What is the Rapid Fire Tesla Idle Range?")]
-    public float RapidFireTeslaEventIdleRange = 1000f;
+    public float RapidFireTeslaEventIdleRange { get; set; } = 1000f;
 
     [Description("What is the Rapid Fire Tesla Trigger Range?")]
-    public float RapidFireTeslaEventTriggerRange = 500f;
+    public float RapidFireTeslaEventTriggerRange { get; set; } = 500f;
     
     [Description("What is the Rapid Fire Tesla Cooldown Time?")]
-    public float RapidFireTeslaEventCooldownTime = 0.1f;
+    public float RapidFireTeslaEventCooldownTime { get; set; } = 0.1f;
 }
