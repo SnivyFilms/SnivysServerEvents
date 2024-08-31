@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Exiled.API.Extensions;
-using MEC;
-using SnivysServerEvents.Configs;
+﻿using SnivysServerEvents.Configs;
 using Exiled.API.Features;
-using UnityEngine;
-using Random = System.Random;
+using Exiled.Events.EventArgs.Player;
+using PlayerAPI = Exiled.API.Features.Player;
+using PlayerEvent = Exiled.Events.Handlers.Player;
 
 namespace SnivysServerEvents.Events;
 public class NameRedactedEventHandlers
@@ -17,6 +14,7 @@ public class NameRedactedEventHandlers
         if (_nreStarted) return;
         _config = Plugin.Instance.Config.NameRedactedConfig;
         Plugin.ActiveEvent += 1;
+        PlayerEvent.Verified += OnVerified;
         Start();
     }
 
@@ -24,17 +22,22 @@ public class NameRedactedEventHandlers
     {
         _nreStarted = true;
         Cassie.MessageTranslated(_config.StartEventCassieMessage, _config.StartEventCassieText);
-        foreach (Player player in Player.List)
+        foreach (PlayerAPI player in PlayerAPI.List)
             player.DisplayNickname = _config.NameRedactedName;
     }
 
+    private static void OnVerified(VerifiedEventArgs ev)
+    {
+        ev.Player.DisplayNickname = _config.NameRedactedName;
+    }
     
     public static void EndEvent()
     {
         if (!_nreStarted) return;
         _nreStarted = false;
         Plugin.ActiveEvent -= 1;
-        foreach (Player player in Player.List)
+        PlayerEvent.Verified -= OnVerified;
+        foreach (PlayerAPI player in PlayerAPI.List)
             player.DisplayNickname = player.Nickname;
     }
 }
