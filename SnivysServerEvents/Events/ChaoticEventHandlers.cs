@@ -8,6 +8,7 @@ using SnivysServerEvents.Configs;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.CustomItems.API.Features;
+using Exiled.Events.EventArgs.Player;
 using PlayerRoles;
 using Cassie = Exiled.API.Features.Cassie;
 using Item = Exiled.API.Features.Items.Item;
@@ -22,10 +23,12 @@ public class ChaoticEventHandlers
 {
     private static CoroutineHandle _choaticHandle;
     private static CoroutineHandle _fakeWarheadHandle;
+    private static CoroutineHandle _rapidFireTeslas;
     private static ChaoticConfig _config;
     private static bool _ceStarted;
     private static bool _ceMedicalItemEvent;
     private static bool _ceFakeWarheadEvent;
+    private static bool _ceRapidFireTelsas;
     private static float _previousWarheadTime;
     public ChaoticEventHandlers()
     {
@@ -49,7 +52,7 @@ public class ChaoticEventHandlers
         for (;;)
         {
             float chaoticEventCycle = _config.TimeForChaosEvent;
-            int chaosRandomNumber = random.Next(minValue:1, maxValue:18);
+            int chaosRandomNumber = random.Next(minValue:1, maxValue:19);
             Log.Debug(chaosRandomNumber);
             if (_config.ChaosEventEndsOtherEvents)
             {
@@ -861,6 +864,21 @@ public class ChaoticEventHandlers
                     }
 
                     break;
+                // Rapid Fire Telsas
+                case 19:
+                    if (_config.RapidFireTelsaEvent)
+                    {
+                        Log.Debug("Rapid Fire Teslas event is active, running code");
+                        _ceRapidFireTelsas = true;
+                        _rapidFireTeslas = Timing.RunCoroutine(RapidFireTelsa());
+                    }
+                    else
+                    {
+                        if (_config.ChaoticEventRerollIfASpecificEventIsDisabled)
+                            chaoticEventCycle = 1;
+                        Log.Debug("Rapid Fire Telsa Gates event is disabled");
+                    }
+                    break;
             }
             yield return Timing.WaitForSeconds(chaoticEventCycle);
         }
@@ -891,6 +909,62 @@ public class ChaoticEventHandlers
                 }
 
                 _ceFakeWarheadEvent = false;
+                yield break;
+            }
+            yield return Timing.WaitForSeconds(0.5f);
+        }
+    }
+
+    private static IEnumerator<float> RapidFireTelsa(/*TriggeringTeslaEventArgs ev*/)
+    {
+        float roundTimeFromEventStart = (float)Round.ElapsedTime.TotalSeconds;
+        float regularActivationTime = 0;
+        float regularIdleRange = 0;
+        float regularTriggerRange = 0;
+        float regularCooldownTime = 0;
+        float modifiedActivationTime = 0;
+        float modifiedIdleRange = 0;
+        float modifiedTriggerRange = 0;
+        float modifiedCooldownTime = 0;
+        
+        foreach (Exiled.API.Features.TeslaGate teslaGate in Exiled.API.Features.TeslaGate.List)
+        {
+            regularActivationTime = teslaGate.ActivationTime;
+            regularCooldownTime = teslaGate.CooldownTime;
+            regularTriggerRange = teslaGate.TriggerRange;
+            regularIdleRange = teslaGate.IdleRange;
+            Log.Debug($"{teslaGate.ActivationTime}, {teslaGate.TriggerRange}, {teslaGate.CooldownTime}, {teslaGate.IdleRange}");
+            teslaGate.ActivationTime = _config.RapidFireTeslaEventActivationTime;
+            modifiedActivationTime = teslaGate.ActivationTime;
+            teslaGate.IdleRange = _config.RapidFireTeslaEventIdleRange;
+            modifiedIdleRange = teslaGate.IdleRange;
+            teslaGate.TriggerRange = _config.RapidFireTeslaEventTriggerRange;
+            modifiedTriggerRange = teslaGate.TriggerRange;
+            teslaGate.CooldownTime = _config.RapidFireTeslaEventCooldownTime;
+            modifiedCooldownTime = teslaGate.CooldownTime;
+        }
+            
+        for (;;)
+        {
+            if (Round.ElapsedTime.TotalSeconds < roundTimeFromEventStart + _config.RapidFireTeslaEventTiming)
+            {
+                Log.Debug(
+                    "Round time hasn't reached the threshold to end rapid fire teslas event, waiting half a second and checking again");
+                Log.Debug($"Current Round Time is: {Round.ElapsedTime.TotalSeconds}. Threshold is: {roundTimeFromEventStart + _config.RapidFireTeslaEventTiming}");
+                Log.Debug(
+                    $"Act {modifiedActivationTime}, Idl {modifiedIdleRange}, Tri {modifiedTriggerRange}, Coo {modifiedCooldownTime}");
+            }
+            else
+            {
+                Log.Debug("Time threshold has been reached, ending event");
+                _ceRapidFireTelsas = false;
+                foreach (Exiled.API.Features.TeslaGate teslaGate in Exiled.API.Features.TeslaGate.List)
+                {
+                    teslaGate.ActivationTime = regularActivationTime;
+                    teslaGate.IdleRange = regularIdleRange;
+                    teslaGate.TriggerRange = regularTriggerRange;
+                    teslaGate.CooldownTime = regularCooldownTime;
+                }
                 yield break;
             }
             yield return Timing.WaitForSeconds(0.5f);
@@ -1011,6 +1085,12 @@ public class ChaoticEventHandlers
         {
             Timing.KillCoroutines(_fakeWarheadHandle);
             _ceFakeWarheadEvent = false;
+        }
+
+        if (_ceRapidFireTelsas)
+        {
+            Timing.KillCoroutines(_rapidFireTeslas);
+            _ceRapidFireTelsas = false;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace SnivysServerEvents
         public override string Name { get; } = "Snivy's Custom In Round Events";
         public override string Author { get; } = "Vicious Vikki, with the assistance from Lucid";
         public override string Prefix { get; } = "VVEvents";
-        public override Version Version { get; } = new Version(1, 3, 4);
+        public override Version Version { get; } = new Version(1, 3, 5);
         public override Version RequiredExiledVersion { get; } = new Version(8, 11, 0);
         public static int ActiveEvent = 0;
         

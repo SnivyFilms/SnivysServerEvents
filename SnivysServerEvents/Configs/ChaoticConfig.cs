@@ -198,4 +198,22 @@ public class ChaoticConfig
     public string FakeoutRespawnAnnouncementsUIUAliveSCPSCassieText { get; set; } = "The UIU Squad, designated {designation} has entered the facility. Awaiting recontainment of {scpnum}";
     
     public string FakeoutRespawnAnnouncementsUIUSCPSDeadCassieText { get; set; } = "The UIU Squad, designated {designation} has entered the facility. Substantial threat remains within the facility - exercise caution.";
+
+    [Description("Should the rapid fire tesla gate event work?")]
+    public bool RapidFireTelsaEvent { get; set; } = true;
+
+    [Description("How long should this event last for in seconds?")]
+    public float RapidFireTeslaEventTiming = 30f;
+
+    [Description("What is the Rapid Fire Tesla Activation Time?")]
+    public float RapidFireTeslaEventActivationTime = 0.1f;
+
+    [Description("What is the Rapid Fire Tesla Idle Range?")]
+    public float RapidFireTeslaEventIdleRange = 1000f;
+
+    [Description("What is the Rapid Fire Tesla Trigger Range?")]
+    public float RapidFireTeslaEventTriggerRange = 500f;
+    
+    [Description("What is the Rapid Fire Tesla Cooldown Time?")]
+    public float RapidFireTeslaEventCooldownTime = 0.1f;
 }
