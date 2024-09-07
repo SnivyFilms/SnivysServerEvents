@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Security;
 using CommandSystem;
 using Exiled.Permissions.Extensions;
-using SnivysServerEvents.Events;
+using SnivysServerEvents.EventHandlers;
 
-namespace SnivysServerEvents.Commands
+namespace SnivysServerEvents.Commands.EventsCommands
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    internal class BlackoutCommand : ICommand
+    internal class ShortCommand : ICommand
     {
-        public string Command { get; set; } = "Blackout";
-        public string[] Aliases { get; set; } = Array.Empty<string>();
-        public string Description { get; set; } = "Starts the Blackout Event";
+        public string Command { get; set; } = "ShortPeople";
+        public string[] Aliases { get; set; } = ["Dwarf", "Tiny"];
+        public string Description { get; set; } = "Starts the Short People Event";
         public bool SanitizeResponse { get; set; } = false;
 
         public bool Execute(ArraySegment<string> args, ICommandSender sender, out string response)
@@ -21,8 +20,8 @@ namespace SnivysServerEvents.Commands
                 response = "You do not have the required permission to use this command";
                 return false;
             }
-            var blackoutEventHandlers = new BlackoutEventHandlers();
-            response = "Starting Blackout Event";
+            var shortEventHandlers = new ShortEventHandlers();
+            response = "Starting Short People Event";
             return true;
         }
     }

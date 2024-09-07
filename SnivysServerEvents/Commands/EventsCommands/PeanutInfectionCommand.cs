@@ -1,16 +1,16 @@
 ﻿using System;
 using CommandSystem;
 using Exiled.Permissions.Extensions;
-using SnivysServerEvents.Events;
+using SnivysServerEvents.EventHandlers;
 
-namespace SnivysServerEvents.Commands
+namespace SnivysServerEvents.Commands.EventsCommands
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    internal class PeanutHydraCommand : ICommand
+    internal class PeanutInfectionCommand : ICommand
     {
-        public string Command { get; set; } = "173Hydra";
-        public string[] Aliases { get; set; } = Array.Empty<string>();
-        public string Description { get; set; } = "Starts the 173 Hydra";
+        public string Command { get; set; } = "173Infection";
+        public string[] Aliases { get; set; } = ["PeanutInfection", "Infection"];
+        public string Description { get; set; } = "Starts the 173 Infection";
         public bool SanitizeResponse { get; set; } = false;
 
         public bool Execute(ArraySegment<string> args, ICommandSender sender, out string response)
@@ -20,8 +20,8 @@ namespace SnivysServerEvents.Commands
                 response = "You do not have the required permission to use this command";
                 return false;
             }
-            var hydraEventHandlers = new PeanutHydraEventHandlers();
-            response = "Starting Peanut Hydra Event";
+            var infectionEventHandlers = new PeanutInfectionEventHandlers();
+            response = "Starting Peanut Infection Event";
             return true;
         }
     }

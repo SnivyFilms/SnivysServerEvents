@@ -9,6 +9,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.CustomItems.API.Features;
 using PlayerRoles;
+using SnivysServerEvents.EventHandlers;
 using Cassie = Exiled.API.Features.Cassie;
 using Item = Exiled.API.Features.Items.Item;
 using Map = Exiled.API.Features.Map;
@@ -18,7 +19,7 @@ using Random = System.Random;
 using Tesla = Exiled.API.Features.TeslaGate;
 using Warhead = Exiled.API.Features.Warhead;
 
-namespace SnivysServerEvents.Events;
+namespace SnivysServerEvents.EventHandlers;
 public class ChaoticEventHandlers
 {
     private static CoroutineHandle _choaticHandle;
@@ -28,7 +29,7 @@ public class ChaoticEventHandlers
     private static bool _ceStarted;
     private static bool _ceMedicalItemEvent;
     private static bool _ceFakeWarheadEvent;
-    private static bool _ceRapidFireTelsas;
+    private static bool _ceRapidFireTeslas;
     private static float _previousWarheadTime;
     public ChaoticEventHandlers()
     {
@@ -555,7 +556,7 @@ public class ChaoticEventHandlers
                     {
                         Log.Debug("Unsafe medical items event active, running code");
                         Log.Debug("Activating Event Handlers for on using medical item");
-                        PlayerEvent.UsingItemCompleted += Plugin.Instance.eventHandlers.OnUsingMedicalItemCE;
+                        PlayerEvent.UsingItemCompleted += Plugin.Instance.EventHandlers.OnUsingMedicalItemCE;
                         _ceMedicalItemEvent = true;
                         foreach (PlayerAPI player in PlayerAPI.List)
                         {
@@ -571,7 +572,7 @@ public class ChaoticEventHandlers
                         else
                             yield return Timing.WaitForSeconds(_config.UnsafeMedicalItemsFixedTime);
                         Log.Debug("Disabling Event Handlers for on using medical item events");
-                        PlayerEvent.UsingItemCompleted -= Plugin.Instance.eventHandlers.OnUsingMedicalItemCE;
+                        PlayerEvent.UsingItemCompleted -= Plugin.Instance.EventHandlers.OnUsingMedicalItemCE;
                         _ceMedicalItemEvent = false;
                         foreach (PlayerAPI player in PlayerAPI.List)
                         {
@@ -869,7 +870,7 @@ public class ChaoticEventHandlers
                     if (_config.RapidFireTelsaEvent)
                     {
                         Log.Debug("Rapid Fire Teslas event is active, running code");
-                        _ceRapidFireTelsas = true;
+                        _ceRapidFireTeslas = true;
                         _rapidFireTeslas = Timing.RunCoroutine(RapidFireTelsa());
                     }
                     else
@@ -963,7 +964,7 @@ public class ChaoticEventHandlers
             else
             {
                 Log.Debug("Time threshold has been reached, ending event");
-                _ceRapidFireTelsas = false;
+                _ceRapidFireTeslas = false;
                 foreach (Tesla teslaGate in Tesla.List)
                 {
                     teslaGate.ActivationTime = regularActivationTime;
@@ -1084,19 +1085,20 @@ public class ChaoticEventHandlers
         Plugin.ActiveEvent -= 1;
         if (_ceMedicalItemEvent)
         {
-            PlayerEvent.UsingItemCompleted -= Plugin.Instance.eventHandlers.OnUsingMedicalItemCE;
+            PlayerEvent.UsingItemCompleted -= Plugin.Instance.EventHandlers.OnUsingMedicalItemCE;
             _ceMedicalItemEvent = false;
         }
+        
         if (_ceFakeWarheadEvent)
         {
             Timing.KillCoroutines(_fakeWarheadHandle);
             _ceFakeWarheadEvent = false;
         }
 
-        if (_ceRapidFireTelsas)
+        if (_ceRapidFireTeslas)
         {
             Timing.KillCoroutines(_rapidFireTeslas);
-            _ceRapidFireTelsas = false;
+            _ceRapidFireTeslas = false;
         }
     }
 }

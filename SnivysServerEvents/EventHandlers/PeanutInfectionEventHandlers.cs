@@ -2,7 +2,7 @@
 using Player = Exiled.Events.Handlers.Player;
 using SnivysServerEvents.Configs;
 
-namespace SnivysServerEvents.Events
+namespace SnivysServerEvents.EventHandlers
 {
     public class PeanutInfectionEventHandlers
     {
@@ -13,7 +13,7 @@ namespace SnivysServerEvents.Events
             if (_pieStarted) return;
             _config = Plugin.Instance.Config.PeanutInfectionConfig;
             Plugin.ActiveEvent += 1;
-            Player.Died += Plugin.Instance.eventHandlers.OnKillingPIE;
+            Player.Died += Plugin.Instance.EventHandlers.OnKillingPIE;
             Start();
         }
 
@@ -27,7 +27,7 @@ namespace SnivysServerEvents.Events
         {
             if (!_pieStarted) return;
             Cassie.MessageTranslated(_config.EndEventCassieMessage, _config.EndEventCassieText);
-            Player.Died -= Plugin.Instance.eventHandlers.OnKillingPIE;
+            Player.Died -= Plugin.Instance.EventHandlers.OnKillingPIE;
             _pieStarted = false;
             Plugin.ActiveEvent -= 1;
         }

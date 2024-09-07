@@ -10,7 +10,7 @@ using SnivysServerEvents.Configs;
 using UnityEngine;
 using CheckpointDoor = Exiled.API.Features.Doors.CheckpointDoor;
 
-namespace SnivysServerEvents.Events;
+namespace SnivysServerEvents.EventHandlers;
 
 public class FreezingTemperaturesEventHandlers
 {

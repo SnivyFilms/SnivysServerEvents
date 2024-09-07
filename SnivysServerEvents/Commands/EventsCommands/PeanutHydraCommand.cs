@@ -1,17 +1,16 @@
 ﻿using System;
 using CommandSystem;
 using Exiled.Permissions.Extensions;
-using SnivysServerEvents.Events;
+using SnivysServerEvents.EventHandlers;
 
-
-namespace SnivysServerEvents.Commands
+namespace SnivysServerEvents.Commands.EventsCommands
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    internal class ShortCommand : ICommand
+    internal class PeanutHydraCommand : ICommand
     {
-        public string Command { get; set; } = "ShortPeople";
-        public string[] Aliases { get; set; } = Array.Empty<string>();
-        public string Description { get; set; } = "Starts the Short People Event";
+        public string Command { get; set; } = "173Hydra";
+        public string[] Aliases { get; set; } = ["PeanutHydra", "Hydra"];
+        public string Description { get; set; } = "Starts the 173 Hydra";
         public bool SanitizeResponse { get; set; } = false;
 
         public bool Execute(ArraySegment<string> args, ICommandSender sender, out string response)
@@ -21,8 +20,8 @@ namespace SnivysServerEvents.Commands
                 response = "You do not have the required permission to use this command";
                 return false;
             }
-            var shortEventHandlers = new ShortEventHandlers();
-            response = "Starting Short People Event";
+            var hydraEventHandlers = new PeanutHydraEventHandlers();
+            response = "Starting Peanut Hydra Event";
             return true;
         }
     }

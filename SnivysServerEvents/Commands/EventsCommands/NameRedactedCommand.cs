@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Security;
 using CommandSystem;
 using Exiled.Permissions.Extensions;
-using SnivysServerEvents.Events;
+using SnivysServerEvents.EventHandlers;
 
-namespace SnivysServerEvents.Commands
+namespace SnivysServerEvents.Commands.EventsCommands
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    internal class FreezingTemperaturesCommand : ICommand
+    internal class NameRedactedCommand : ICommand
     {
-        public string Command { get; set; } = "FreezingTemps";
+        public string Command { get; set; } = "NameRedacted";
         public string[] Aliases { get; set; } = Array.Empty<string>();
-        public string Description { get; set; } = "Starts the Freezing Temperature Event";
+        public string Description { get; set; } = "Removes player's nicknames and sets them to something else";
         public bool SanitizeResponse { get; set; } = false;
 
         public bool Execute(ArraySegment<string> args, ICommandSender sender, out string response)
@@ -21,8 +20,8 @@ namespace SnivysServerEvents.Commands
                 response = "You do not have the required permission to use this command";
                 return false;
             }
-            var freezingTemperaturesHandlers = new FreezingTemperaturesEventHandlers();
-            response = "Starting Freezing Temperature Event";
+            var nameRedactedHandler = new NameRedactedEventHandlers();
+            response = "Starting Name Redacted Event";
             return true;
         }
     }

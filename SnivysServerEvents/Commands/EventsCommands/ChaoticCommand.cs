@@ -1,16 +1,16 @@
 ﻿using System;
 using CommandSystem;
 using Exiled.Permissions.Extensions;
-using SnivysServerEvents.Events;
+using SnivysServerEvents.EventHandlers;
 
-namespace SnivysServerEvents.Commands
+namespace SnivysServerEvents.Commands.EventsCommands
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    internal class VariableLightCommand : ICommand
+    internal class ChaoticCommand : ICommand
     {
-        public string Command { get; set; } = "VariableLights";
+        public string Command { get; set; } = "Chaotic";
         public string[] Aliases { get; set; } = Array.Empty<string>();
-        public string Description { get; set; } = "Starts the Variable Lights Event. (PHOTOSENSITIVITY WARNING!)";
+        public string Description { get; set; } = "Starts the Chaotic Event";
         public bool SanitizeResponse { get; set; } = false;
 
         public bool Execute(ArraySegment<string> args, ICommandSender sender, out string response)
@@ -20,8 +20,8 @@ namespace SnivysServerEvents.Commands
                 response = "You do not have the required permission to use this command";
                 return false;
             }
-            var variableEventHandlers = new VariableLightsEventHandlers();
-            response = "Starting Variable Lights Event.";
+            var chaoticHandlers = new ChaoticEventHandlers();
+            response = "Starting Chaotic Event";
             return true;
         }
     }

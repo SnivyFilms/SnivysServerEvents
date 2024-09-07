@@ -6,7 +6,7 @@ using Exiled.API.Features;
 using UnityEngine;
 using Random = System.Random;
 
-namespace SnivysServerEvents.Events;
+namespace SnivysServerEvents.EventHandlers;
 public class VariableLightsEventHandlers
 {
     private static CoroutineHandle _lightChangingHandle;

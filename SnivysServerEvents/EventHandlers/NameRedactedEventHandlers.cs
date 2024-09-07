@@ -4,7 +4,7 @@ using Exiled.Events.EventArgs.Player;
 using PlayerAPI = Exiled.API.Features.Player;
 using PlayerEvent = Exiled.Events.Handlers.Player;
 
-namespace SnivysServerEvents.Events;
+namespace SnivysServerEvents.EventHandlers;
 public class NameRedactedEventHandlers
 {
     private static NameRedactedConfig _config;

@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using CommandSystem;
 using Exiled.API.Features;
+using SnivysServerEvents.Commands.EventsCommands;
 
 namespace SnivysServerEvents.Commands
 {
@@ -11,7 +11,7 @@ namespace SnivysServerEvents.Commands
         {
                 public override string Command { get; } = "VVE";
                 public override string Description { get; } = "Main command for Snivy's Server Events";
-                public override string[] Aliases { get; } = Array.Empty<string>();
+                public override string[] Aliases { get; } = ["SSE", "SnivysServerEvents"];
                 
                 public override void LoadGeneratedCommands()
                 {
@@ -25,6 +25,7 @@ namespace SnivysServerEvents.Commands
                                 RegisterCommand(new PeanutInfectionCommand());
                                 RegisterCommand(new ShortCommand());
                                 RegisterCommand(new VariableLightCommand());
+                                RegisterCommand(new StopCommand());
                         }
                         catch (Exception e)
                         {

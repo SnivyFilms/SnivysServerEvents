@@ -1,28 +1,29 @@
 ﻿using System;
 using CommandSystem;
 using Exiled.Permissions.Extensions;
-using SnivysServerEvents.Events;
-
+using SnivysServerEvents.Commands.EventsCommands;
 
 namespace SnivysServerEvents.Commands
 {
+    [CommandHandler(typeof(GameConsoleCommandHandler))]
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    internal class NameRedactedCommand : ICommand
+    internal class StopCommand : ICommand
     {
-        public string Command { get; set; } = "NameRedacted";
-        public string[] Aliases { get; set; } = Array.Empty<string>();
-        public string Description { get; set; } = "Removes player's nicknames and sets them to something else";
+        public string Command { get; set; } = "stop";
+        public string[] Aliases { get; set; } = ["Kill", "Terminate", "End"];
+        public string Description { get; set; } = "Stops all events";
         public bool SanitizeResponse { get; set; } = false;
-
+        
         public bool Execute(ArraySegment<string> args, ICommandSender sender, out string response)
         {
-            if (!sender.CheckPermission("vvevents.run"))
+            if (!sender.CheckPermission("vvevents.stop"))
             {
                 response = "You do not have the required permission to use this command";
                 return false;
             }
-            var nameRedactedHandler = new NameRedactedEventHandlers();
-            response = "Starting Name Redacted Event";
+            
+            response = "Stopping all events";
+            EventHandlers.EventHandlers.StopEventsCommand();
             return true;
         }
     }

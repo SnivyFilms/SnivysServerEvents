@@ -10,13 +10,14 @@ using Exiled.Events.EventArgs.Server;
 using MEC;
 using PlayerRoles;
 using PluginAPI.Events;
+using SnivysServerEvents.EventHandlers;
 using UnityEngine;
 using Random = System.Random;
-using Events = SnivysServerEvents.Events;
+using Events = SnivysServerEvents.EventHandlers;
 
 // ReSharper disable InconsistentNaming
 
-namespace SnivysServerEvents.Events
+namespace SnivysServerEvents.EventHandlers
 {
     
     public class EventHandlers
@@ -34,24 +35,27 @@ namespace SnivysServerEvents.Events
         public void OnEndingRound(RoundEndedEventArgs ev)
         {
             Log.Debug("Checking if an event is active at round end");
-            if (Plugin.ActiveEvent == 0) return;
-            Log.Debug("Disabling Event Handlers, Clearing Generator Count");
-            _activatedGenerators = 0;
-            BlackoutEventHandlers.EndEvent();
-            PeanutHydraEventHandlers.EndEvent();
-            PeanutInfectionEventHandlers.EndEvent();
-            VariableLightsEventHandlers.EndEvent();
-            ShortEventHandlers.EndEvent();
-            FreezingTemperaturesEventHandlers.EndEvent();
-            ChaoticEventHandlers.EndEvent();
-            NameRedactedEventHandlers.EndEvent();
-            Plugin.ActiveEvent = 0;
+            EndEvents();
         }
         
         //Waiting for Players
         public void OnWaitingForPlayers()
         {
             Log.Debug("Checking if an event is active at waiting for players");
+            EndEvents();
+        }
+
+        //Stop Events Command
+        public static void StopEventsCommand()
+        {
+            Log.Debug("Killing events due to the stop command being used");
+            EndEvents();
+        }
+
+        //Ends Events method, On Round End, On Waiting For Players, and Stop Commands points here
+        private static void EndEvents()
+        {
+            Log.Debug("Checking again if there's events active");
             if (Plugin.ActiveEvent == 0) return;
             Log.Debug("Disabling Event Handlers, Clearing Generator Count");
             _activatedGenerators = 0;
@@ -65,7 +69,6 @@ namespace SnivysServerEvents.Events
             NameRedactedEventHandlers.EndEvent();
             Plugin.ActiveEvent = 0;
         }
-
         
         //Blackout
         public void OnGeneratorEngagedBOE(GeneratorActivatingEventArgs ev)

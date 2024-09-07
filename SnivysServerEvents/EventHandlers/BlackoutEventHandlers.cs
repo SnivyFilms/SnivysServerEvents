@@ -1,8 +1,8 @@
 ﻿using Exiled.API.Features;
-using Maps = Exiled.Events.Handlers.Map;
 using SnivysServerEvents.Configs;
+using Maps = Exiled.Events.Handlers.Map;
 
-namespace SnivysServerEvents.Events
+namespace SnivysServerEvents.EventHandlers
 {
     public class BlackoutEventHandlers
     {
@@ -15,7 +15,7 @@ namespace SnivysServerEvents.Events
             Plugin.ActiveEvent += 1;
             if (_config.GeneratorEndsEvent)
             {
-                Maps.GeneratorActivating += Plugin.Instance.eventHandlers.OnGeneratorEngagedBOE;
+                Maps.GeneratorActivating += Plugin.Instance.EventHandlers.OnGeneratorEngagedBOE;
             }
             Start();
         }
@@ -38,7 +38,7 @@ namespace SnivysServerEvents.Events
             Cassie.MessageTranslated(_config.EndEventCassieMessage, _config.EndEventCassieText);
             if (_config.GeneratorEndsEvent)
             {
-                Maps.GeneratorActivating -= Plugin.Instance.eventHandlers.OnGeneratorEngagedBOE;
+                Maps.GeneratorActivating -= Plugin.Instance.EventHandlers.OnGeneratorEngagedBOE;
             }
             Map.TurnOffAllLights(1);
             _boeStarted = false;

@@ -1,16 +1,16 @@
 ﻿using System;
 using CommandSystem;
 using Exiled.Permissions.Extensions;
-using SnivysServerEvents.Events;
+using SnivysServerEvents.EventHandlers;
 
-namespace SnivysServerEvents.Commands
+namespace SnivysServerEvents.Commands.EventsCommands
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    internal class PeanutInfectionCommand : ICommand
+    internal class BlackoutCommand : ICommand
     {
-        public string Command { get; set; } = "173Infection";
-        public string[] Aliases { get; set; } = Array.Empty<string>();
-        public string Description { get; set; } = "Starts the 173 Infection";
+        public string Command { get; set; } = "Blackout";
+        public string[] Aliases { get; set; } = ["LightsOut"];
+        public string Description { get; set; } = "Starts the Blackout Event";
         public bool SanitizeResponse { get; set; } = false;
 
         public bool Execute(ArraySegment<string> args, ICommandSender sender, out string response)
@@ -20,8 +20,8 @@ namespace SnivysServerEvents.Commands
                 response = "You do not have the required permission to use this command";
                 return false;
             }
-            var infectionEventHandlers = new PeanutInfectionEventHandlers();
-            response = "Starting Peanut Infection Event";
+            var blackoutEventHandlers = new BlackoutEventHandlers();
+            response = "Starting Blackout Event";
             return true;
         }
     }

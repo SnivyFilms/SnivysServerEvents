@@ -2,7 +2,7 @@ using Exiled.API.Features;
 using Player = Exiled.Events.Handlers.Player;
 using SnivysServerEvents.Configs;
 
-namespace SnivysServerEvents.Events
+namespace SnivysServerEvents.EventHandlers
 {
     
     public class PeanutHydraEventHandlers
@@ -14,8 +14,8 @@ namespace SnivysServerEvents.Events
             if (_pheStarted) return;
             Config = Plugin.Instance.Config.PeanutHydraConfig;
             Plugin.ActiveEvent += 1;
-            Player.Dying += Plugin.Instance.eventHandlers.OnDyingPHE;
-            Player.Died += Plugin.Instance.eventHandlers.OnDiedPHE;
+            Player.Dying += Plugin.Instance.EventHandlers.OnDyingPHE;
+            Player.Died += Plugin.Instance.EventHandlers.OnDiedPHE;
             Start();
         }
 
@@ -28,8 +28,8 @@ namespace SnivysServerEvents.Events
         public static void EndEvent()
         {
             if (!_pheStarted) return;
-            Player.Dying += Plugin.Instance.eventHandlers.OnDyingPHE;
-            Player.Died -= Plugin.Instance.eventHandlers.OnDiedPHE;
+            Player.Dying += Plugin.Instance.EventHandlers.OnDyingPHE;
+            Player.Died -= Plugin.Instance.EventHandlers.OnDiedPHE;
             _pheStarted = false;
             Plugin.ActiveEvent -= 1;
         }

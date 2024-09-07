@@ -2,7 +2,7 @@
 using SnivysServerEvents.Configs;
 using Exiled.API.Features;
 
-namespace SnivysServerEvents.Events
+namespace SnivysServerEvents.EventHandlers
 {
     internal class ShortEventHandlers
     {
@@ -14,7 +14,7 @@ namespace SnivysServerEvents.Events
             if (_seStarted) return;
             _config = Plugin.Instance.Config.ShortConfig;
             Plugin.ActiveEvent += 1;
-            Exiled.Events.Handlers.Player.ChangingRole += Plugin.Instance.eventHandlers.OnRoleSwapSE;
+            Exiled.Events.Handlers.Player.ChangingRole += Plugin.Instance.EventHandlers.OnRoleSwapSE;
             Start();
         }
 
@@ -49,7 +49,7 @@ namespace SnivysServerEvents.Events
             if (!_seStarted) return;
             Cassie.MessageTranslated(_config.EndEventCassieMessage, _config.EndEventCassieText);
             Log.Debug("Unregistering ChangingRole (SE) Event Handlers");
-            Exiled.Events.Handlers.Player.ChangingRole -= Plugin.Instance.eventHandlers.OnRoleSwapSE;
+            Exiled.Events.Handlers.Player.ChangingRole -= Plugin.Instance.EventHandlers.OnRoleSwapSE;
             _seStarted = false;
             Plugin.ActiveEvent -= 1;
         }
