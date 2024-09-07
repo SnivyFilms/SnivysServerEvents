@@ -9,7 +9,7 @@ namespace SnivysServerEvents.Commands
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     internal class StopCommand : ICommand
     {
-        public string Command { get; set; } = "stop";
+        public string Command { get; set; } = "Stop";
         public string[] Aliases { get; set; } = ["Kill", "Terminate", "End"];
         public string Description { get; set; } = "Stops all events";
         public bool SanitizeResponse { get; set; } = false;
