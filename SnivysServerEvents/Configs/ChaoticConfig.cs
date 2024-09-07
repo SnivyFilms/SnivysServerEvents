@@ -61,7 +61,7 @@ public class ChaoticConfig
     public float FakeAutoNukeTimeOut { get; set; } = 15f;
 
     [Description("Should the old nuke time be restored after the fake out? Otherwise it will be at 30 seconds")]
-    public bool FakeAutoNukeRestoresOldTime = true;
+    public bool FakeAutoNukeRestoresOldTime { get; set; } = true;
 
     [Description("Should the remove weapons chaos event run?")]
     public bool RemoveWeaponsEvent { get; set; } = true;
