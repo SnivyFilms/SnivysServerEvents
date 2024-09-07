@@ -87,14 +87,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\Events Commands\BlackoutCommand.cs" />
-    <Compile Include="Commands\Events Commands\ChaoticCommand.cs" />
-    <Compile Include="Commands\Events Commands\FreezingTemperaturesCommand.cs" />
-    <Compile Include="Commands\Events Commands\NameRedactedCommand.cs" />
-    <Compile Include="Commands\Events Commands\PeanutHydraCommand.cs" />
-    <Compile Include="Commands\Events Commands\PeanutInfectionCommand.cs" />
-    <Compile Include="Commands\Events Commands\ShortCommand.cs" />
-    <Compile Include="Commands\Events Commands\VariableLightCommand.cs" />
+    <Compile Include="Commands\EventsCommands\BlackoutCommand.cs" />
+    <Compile Include="Commands\EventsCommands\ChaoticCommand.cs" />
+    <Compile Include="Commands\EventsCommands\FreezingTemperaturesCommand.cs" />
+    <Compile Include="Commands\EventsCommands\NameRedactedCommand.cs" />
+    <Compile Include="Commands\EventsCommands\PeanutHydraCommand.cs" />
+    <Compile Include="Commands\EventsCommands\PeanutInfectionCommand.cs" />
+    <Compile Include="Commands\EventsCommands\ShortCommand.cs" />
+    <Compile Include="Commands\EventsCommands\VariableLightCommand.cs" />
     <Compile Include="Commands\MainCommand.cs" />
     <Compile Include="Commands\StopCommand.cs" />
     <Compile Include="Configs\BlackoutConfig.cs" />
@@ -106,15 +106,15 @@
     <Compile Include="Configs\PeanutHydraConfig.cs" />
     <Compile Include="Configs\ShortConfig.cs" />
     <Compile Include="Configs\VariableLightsConfig.cs" />
-    <Compile Include="Event Handlers\BlackoutEventHandlers.cs" />
-    <Compile Include="Event Handlers\ChaoticEventHandlers.cs" />
-    <Compile Include="Event Handlers\EventHandlers.cs" />
-    <Compile Include="Event Handlers\FreezingTemperaturesEventHandlers.cs" />
-    <Compile Include="Event Handlers\NameRedactedEventHandlers.cs" />
-    <Compile Include="Event Handlers\PeanutInfectionEventHandlers.cs" />
-    <Compile Include="Event Handlers\PeanutHydraEventHandlers.cs" />
-    <Compile Include="Event Handlers\ShortEventHandlers.cs" />
-    <Compile Include="Event Handlers\VariableLightsEventHandlers.cs" />
+    <Compile Include="EventHandlers\BlackoutEventHandlers.cs" />
+    <Compile Include="EventHandlers\ChaoticEventHandlers.cs" />
+    <Compile Include="EventHandlers\EventHandlers.cs" />
+    <Compile Include="EventHandlers\FreezingTemperaturesEventHandlers.cs" />
+    <Compile Include="EventHandlers\NameRedactedEventHandlers.cs" />
+    <Compile Include="EventHandlers\PeanutInfectionEventHandlers.cs" />
+    <Compile Include="EventHandlers\PeanutHydraEventHandlers.cs" />
+    <Compile Include="EventHandlers\ShortEventHandlers.cs" />
+    <Compile Include="EventHandlers\VariableLightsEventHandlers.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
