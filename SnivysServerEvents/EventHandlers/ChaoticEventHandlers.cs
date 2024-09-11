@@ -6,10 +6,12 @@ using Exiled.API.Extensions;
 using MEC;
 using SnivysServerEvents.Configs;
 using Exiled.API.Features;
+using Exiled.API.Features.Doors;
 using Exiled.API.Features.Items;
 using Exiled.CustomItems.API.Features;
+using LightContainmentZoneDecontamination;
 using PlayerRoles;
-using SnivysServerEvents.EventHandlers;
+using UnityEngine;
 using Cassie = Exiled.API.Features.Cassie;
 using Item = Exiled.API.Features.Items.Item;
 using Map = Exiled.API.Features.Map;
@@ -25,12 +27,15 @@ public class ChaoticEventHandlers
     private static CoroutineHandle _choaticHandle;
     private static CoroutineHandle _fakeWarheadHandle;
     private static CoroutineHandle _rapidFireTeslas;
+    private static CoroutineHandle _routerKickingSimulator;
     private static ChaoticConfig _config;
     private static bool _ceStarted;
     private static bool _ceMedicalItemEvent;
     private static bool _ceFakeWarheadEvent;
     private static bool _ceRapidFireTeslas;
+    private static bool _ceRouterKickingSimulator;
     private static float _previousWarheadTime;
+    private static double _previousDecomTime;
     public ChaoticEventHandlers()
     {
         _config = Plugin.Instance.Config.ChaoticConfig;
@@ -53,7 +58,7 @@ public class ChaoticEventHandlers
         for (;;)
         {
             float chaoticEventCycle = _config.TimeForChaosEvent;
-            int chaosRandomNumber = random.Next(minValue:1, maxValue:19);
+            int chaosRandomNumber = random.Next(minValue:1, maxValue:20);
             Log.Debug(chaosRandomNumber);
             if (_config.ChaosEventEndsOtherEvents)
             {
@@ -621,47 +626,7 @@ public class ChaoticEventHandlers
                         {
                             case 1:
                                 if (_config.FakeoutRespawnAnnouncementsMTFAllow)
-                                {
-                                    foreach (Player player in Player.List)
-                                    {
-                                        if (player.Role.Team == Team.SCPs)
-                                            scpCount++;
-                                    }
-
-                                    if (scpCount == 0)
-                                    {
-                                        cassieMessage = _config.FakeoutRespawnAnnouncementsMTFSCPSDeadCassie;
-                                        cassieText = _config.FakeoutRespawnAnnouncementsMTFSCPSDeadCassieText;
-                                        int randomNatoLetter = random.Next(minValue: 1, maxValue: 26);
-                                        int randomNatoNumber = random.Next(minValue: 2, maxValue: 20);
-                                        cassieMessage = cassieMessage.Replace("{designation}", $"nato_{GetNatoLetter(randomNatoLetter)} {randomNatoNumber}");
-                                        cassieText = cassieText.Replace("{designation}", GetNatoName(randomNatoLetter) + " " + random.Next(randomNatoNumber));
-                                        Cassie.MessageTranslated(cassieMessage, cassieText);
-                                    }
-                                    else
-                                    {
-                                        cassieMessage = _config.FakeoutRespawnAnnouncementsMTFAliveSCPSCassie;
-                                        cassieText = _config.FakeoutRespawnAnnouncementsMTFAliveSCPSCassieText;
-                                        if (scpCount == 1)
-                                        {
-                                            cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
-                                            cassieText = cassieText.Replace("{scpnum}", $"{scpCount} SCP subject");
-                                        }
-                                        else
-                                        {
-                                            cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
-                                            cassieText = cassieText.Replace("{scpnum}", $"{scpCount} SCP subject");
-                                            cassieMessage = cassieMessage.Replace("scpsubject", "scpsubjects");
-                                            cassieText = cassieText.Replace("SCP subject", "SCP subjects");
-                                        }
-
-                                        int randomNatoLetter = random.Next(minValue: 1, maxValue: 26);
-                                        int randomNatoNumber = random.Next(minValue: 2, maxValue: 20);
-                                        cassieMessage = cassieMessage.Replace("{designation}", $"nato_{GetNatoLetter(randomNatoLetter)} {randomNatoNumber}");
-                                        cassieText = cassieText.Replace("{designation}", GetNatoName(randomNatoLetter) + " " + random.Next(randomNatoNumber));
-                                        Cassie.MessageTranslated(cassieMessage, cassieText);
-                                    }
-                                }
+                                    MtfFakeoutCassie(cassieMessage, cassieText, scpCount);
                                 
                                 break;
                             
@@ -709,49 +674,7 @@ public class ChaoticEventHandlers
                                     }
                                 }
                                 else if (_config.FakeoutRespawnAnnouncementsMTFFallback)
-                                {
-                                    foreach (Player player in Player.List)
-                                    {
-                                        if (player.Role.Team == Team.SCPs)
-                                            scpCount++;
-                                    }
-
-                                    if (scpCount == 0)
-                                    {
-                                        cassieMessage = _config.FakeoutRespawnAnnouncementsUIUSCPSDeadCassie;
-                                        cassieText = _config.FakeoutRespawnAnnouncementsUIUSCPSDeadCassieText;
-                                        int randomNatoLetter = random.Next(minValue: 1, maxValue: 26);
-                                        int randomNatoNumber = random.Next(minValue: 2, maxValue: 20);
-                                        cassieMessage = cassieMessage.Replace("{designation}", $"nato_{GetNatoLetter(randomNatoLetter)} {randomNatoNumber}");
-                                        cassieText = cassieText.Replace("{designation}", GetNatoName(randomNatoLetter) + " " + random.Next(randomNatoNumber));
-                                        Cassie.MessageTranslated(cassieMessage, cassieText);
-                                    }
-                                    
-                                    else
-                                    {
-                                        cassieMessage = _config.FakeoutRespawnAnnouncementsUIUAliveSCPSCassie;
-                                        cassieText = _config.FakeoutRespawnAnnouncementsUIUAliveSCPSCassieText;
-                                        if (scpCount == 1)
-                                        {
-                                            cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
-                                            cassieText = cassieText.Replace("{scpnum}", $"{scpCount} SCP subject");
-                                        }
-                                        
-                                        else
-                                        {
-                                            cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
-                                            cassieText = cassieText.Replace("{scpnum}", $"{scpCount} SCP subject");
-                                            cassieMessage = cassieMessage.Replace("scpsubject", "scpsubjects");
-                                            cassieText = cassieText.Replace("SCP subject", "SCP subjects");
-                                        }
-
-                                        int randomNatoLetter = random.Next(minValue: 1, maxValue: 26);
-                                        int randomNatoNumber = random.Next(minValue: 2, maxValue: 20);
-                                        cassieMessage = cassieMessage.Replace("{designation}", $"nato_{GetNatoLetter(randomNatoLetter)} {randomNatoNumber}");
-                                        cassieText = cassieText.Replace("{designation}", GetNatoName(randomNatoLetter) + " " + random.Next(randomNatoNumber));
-                                        Cassie.MessageTranslated(cassieMessage, cassieText);
-                                    }
-                                }
+                                    MtfFakeoutCassie(cassieMessage, cassieText, scpCount);
                                 
                                 break;
                             
@@ -759,49 +682,7 @@ public class ChaoticEventHandlers
                                 if (_config.FakeoutRespawnAnnouncementsChaosAllow)
                                     Cassie.MessageTranslated(_config.FakeoutRespawnAnnouncementsChaosCassie, _config.FakeoutRespawnAnnouncementsChaosCassieText);
                                 else if (_config.FakeoutRespawnAnnouncementsMTFFallback)
-                                {
-                                    foreach (Player player in Player.List)
-                                    {
-                                        if (player.Role.Team == Team.SCPs)
-                                            scpCount++;
-                                    }
-
-                                    if (scpCount == 0)
-                                    {
-                                        cassieMessage = _config.FakeoutRespawnAnnouncementsUIUSCPSDeadCassie;
-                                        cassieText = _config.FakeoutRespawnAnnouncementsUIUSCPSDeadCassieText;
-                                        int randomNatoLetter = random.Next(minValue: 1, maxValue: 26);
-                                        int randomNatoNumber = random.Next(minValue: 2, maxValue: 20);
-                                        cassieMessage = cassieMessage.Replace("{designation}", $"nato_{GetNatoLetter(randomNatoLetter)} {randomNatoNumber}");
-                                        cassieText = cassieText.Replace("{designation}", GetNatoName(randomNatoLetter) + " " + random.Next(randomNatoNumber));
-                                        Cassie.MessageTranslated(cassieMessage, cassieText);
-                                    }
-                                    
-                                    else
-                                    {
-                                        cassieMessage = _config.FakeoutRespawnAnnouncementsUIUAliveSCPSCassie;
-                                        cassieText = _config.FakeoutRespawnAnnouncementsUIUAliveSCPSCassieText;
-                                        if (scpCount == 1)
-                                        {
-                                            cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
-                                            cassieText = cassieText.Replace("{scpnum}", $"{scpCount} SCP subject");
-                                        }
-                                        
-                                        else
-                                        {
-                                            cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
-                                            cassieText = cassieText.Replace("{scpnum}", $"{scpCount} SCP subject");
-                                            cassieMessage = cassieMessage.Replace("scpsubject", "scpsubjects");
-                                            cassieText = cassieText.Replace("SCP subject", "SCP subjects");
-                                        }
-
-                                        int randomNatoLetter = random.Next(minValue: 1, maxValue: 26);
-                                        int randomNatoNumber = random.Next(minValue: 2, maxValue: 20);
-                                        cassieMessage = cassieMessage.Replace("{designation}", $"nato_{GetNatoLetter(randomNatoLetter)} {randomNatoNumber}");
-                                        cassieText = cassieText.Replace("{designation}", GetNatoName(randomNatoLetter) + " " + random.Next(randomNatoNumber));
-                                        Cassie.MessageTranslated(cassieMessage, cassieText);
-                                    }
-                                }
+                                    MtfFakeoutCassie(cassieMessage, cassieText, scpCount);
                                 
                                 break;
                             
@@ -809,49 +690,7 @@ public class ChaoticEventHandlers
                                 if(_config.FakeoutRespawnAnnouncementsSerpentsAllow)
                                     Cassie.MessageTranslated(_config.FakeoutRespawnAnnouncementsSerpentsCassie, _config.FakeoutRespawnAnnouncementsSerpentsCassieText);
                                 else if (_config.FakeoutRespawnAnnouncementsMTFFallback)
-                                {
-                                    foreach (Player player in Player.List)
-                                    {
-                                        if (player.Role.Team == Team.SCPs)
-                                            scpCount++;
-                                    }
-
-                                    if (scpCount == 0)
-                                    {
-                                        cassieMessage = _config.FakeoutRespawnAnnouncementsUIUSCPSDeadCassie;
-                                        cassieText = _config.FakeoutRespawnAnnouncementsUIUSCPSDeadCassieText;
-                                        int randomNatoLetter = random.Next(minValue: 1, maxValue: 26);
-                                        int randomNatoNumber = random.Next(minValue: 2, maxValue: 20);
-                                        cassieMessage = cassieMessage.Replace("{designation}", $"nato_{GetNatoLetter(randomNatoLetter)} {randomNatoNumber}");
-                                        cassieText = cassieText.Replace("{designation}", GetNatoName(randomNatoLetter) + " " + random.Next(randomNatoNumber));
-                                        Cassie.MessageTranslated(cassieMessage, cassieText);
-                                    }
-                                    
-                                    else
-                                    {
-                                        cassieMessage = _config.FakeoutRespawnAnnouncementsUIUAliveSCPSCassie;
-                                        cassieText = _config.FakeoutRespawnAnnouncementsUIUAliveSCPSCassieText;
-                                        if (scpCount == 1)
-                                        {
-                                            cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
-                                            cassieText = cassieText.Replace("{scpnum}", $"{scpCount} SCP subject");
-                                        }
-                                        
-                                        else
-                                        {
-                                            cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
-                                            cassieText = cassieText.Replace("{scpnum}", $"{scpCount} SCP subject");
-                                            cassieMessage = cassieMessage.Replace("scpsubject", "scpsubjects");
-                                            cassieText = cassieText.Replace("SCP subject", "SCP subjects");
-                                        }
-
-                                        int randomNatoLetter = random.Next(minValue: 1, maxValue: 26);
-                                        int randomNatoNumber = random.Next(minValue: 2, maxValue: 20);
-                                        cassieMessage = cassieMessage.Replace("{designation}", $"nato_{GetNatoLetter(randomNatoLetter)} {randomNatoNumber}");
-                                        cassieText = cassieText.Replace("{designation}", GetNatoName(randomNatoLetter) + " " + random.Next(randomNatoNumber));
-                                        Cassie.MessageTranslated(cassieMessage, cassieText);
-                                    }
-                                }
+                                    MtfFakeoutCassie(cassieMessage, cassieText, scpCount);
                                 
                                 break;
                         }
@@ -865,7 +704,7 @@ public class ChaoticEventHandlers
                     }
 
                     break;
-                // Rapid Fire Telsas
+                // Rapid Fire Teslas
                 case 19:
                     if (_config.RapidFireTelsaEvent)
                     {
@@ -878,6 +717,85 @@ public class ChaoticEventHandlers
                         if (_config.ChaoticEventRerollIfASpecificEventIsDisabled)
                             chaoticEventCycle = 1;
                         Log.Debug("Rapid Fire Telsa Gates event is disabled");
+                    }
+                    
+                    break;
+                //Players shit themselves
+                case 20:
+                    if (_config.PlayerShittingPantsEvent)
+                    {
+                        Log.Debug("Player shitting pants is active, running code");
+                        foreach (PlayerAPI player in PlayerAPI.List)
+                        {
+                            Log.Debug($"Spawning a tantrum where {player} is at");
+                            Map.PlaceTantrum(player.Position);
+                            player.Broadcast(new Exiled.API.Features.Broadcast(_config.PlayerShittingPantsBroadcast,
+                                (ushort)_config.BroadcastDisplayTime));
+                        }
+                    }
+                    else
+                    {
+                        if (_config.ChaoticEventRerollIfASpecificEventIsDisabled)
+                            chaoticEventCycle = 1;
+                        Log.Debug("Player shitting pants event is disabled");
+                    }
+
+                    break;
+                //Router kicking simulator
+                case 21:
+                    if (_config.RouterKickingSimulatorEvent)
+                    {
+                        Log.Debug("Router kicking simulator event is active, running code");
+                        _ceRouterKickingSimulator = true;
+                        foreach (PlayerAPI player in PlayerAPI.List)
+                        {
+                            Log.Debug($"Showing Router Kicking Simulator start message to {player}");
+                            player.Broadcast(new Exiled.API.Features.Broadcast(
+                                _config.RouterKickingSimulatorStartBroadcast,
+                                (ushort)_config.BroadcastDisplayTime));
+                        }
+                        
+                        if (_config.RouterKickingSimulatorDisablesElevators)
+                        {
+                            Log.Debug("Locking elevator doors");
+                            foreach (Door door in Door.List)
+                                if (door is ElevatorDoor { IsLocked: false } elevatorDoor)
+                                    elevatorDoor.ChangeLock(DoorLockType.AdminCommand);
+                        }
+
+                        if (_config.RouterKickingSimulatorDisablesDecomAndNuke)
+                        {
+                            Log.Debug("Disabling Decontamination and Nuke");
+                            if (!Warhead.IsDetonated)
+                            {
+                                if (Warhead.IsInProgress)
+                                {
+                                    Warhead.IsLocked = false;
+                                    _previousWarheadTime = Warhead.RealDetonationTimer;
+                                    Warhead.DetonationTimer = 90f;
+                                    Warhead.Stop();
+                                }
+
+                                if (Warhead.Status != WarheadStatus.NotArmed)
+                                    Warhead.Status = WarheadStatus.NotArmed;
+
+                                Warhead.IsLocked = true;
+                            }
+
+                            if (!Map.IsLczDecontaminated)
+                            {
+                                _previousDecomTime = DecontaminationController.Singleton.RoundStartTime;
+                                DecontaminationController.Singleton.RoundStartTime = -1.0;
+                            }
+                        }
+                        
+                        _routerKickingSimulator = Timing.RunCoroutine(RouterKickingSimulator());
+                    }
+                    else
+                    {
+                        if (_config.ChaoticEventRerollIfASpecificEventIsDisabled)
+                            chaoticEventCycle = 1;
+                        Log.Debug("Router kicking simulator event is disabled");
                     }
                     break;
             }
@@ -948,6 +866,11 @@ public class ChaoticEventHandlers
                 modifiedIdleRange = teslaGate.IdleRange;
                 modifiedTriggerRange = teslaGate.TriggerRange;
                 modifiedCooldownTime = teslaGate.CooldownTime;
+                Log.Debug("Going from top down, modified activation time, idle range, trigger range, cooldown time");
+                Log.Debug(modifiedActivationTime);
+                Log.Debug(modifiedIdleRange);
+                Log.Debug(modifiedTriggerRange);
+                Log.Debug(modifiedCooldownTime);
             }
         }
             
@@ -977,6 +900,74 @@ public class ChaoticEventHandlers
             yield return Timing.WaitForSeconds(0.5f);
         }
     }
+
+    private static IEnumerator<float> RouterKickingSimulator()
+    {
+        int routerKickCount = 0;
+        Dictionary<int, Vector3> playerPositions = new Dictionary<int, Vector3>();
+        Log.Debug($"Waiting for {_config.RouterKickingSimulatorStartWaitTime} before starting properly");
+        Timing.WaitForSeconds(_config.RouterKickingSimulatorStartWaitTime);
+        for (;;)
+        {
+            if (routerKickCount != _config.RouterKickingSimulatorRouterKickAmount)
+            {
+                foreach (PlayerAPI player in PlayerAPI.List)
+                    if (player.Role.Team != Team.Dead)
+                        playerPositions[player.Id] = player.Position;
+
+                Timing.WaitForSeconds(_config.RouterKickingSimulatorLagTime);
+                
+                foreach (PlayerAPI player in PlayerAPI.List)
+                {
+                    if (playerPositions.TryGetValue(player.Id, out Vector3 position))
+                        player.Position = position;
+                    else
+                        Log.Debug($"{player} isn't in the list. Most likely due to not being connected or alive during the last cycle.");
+                }
+                routerKickCount++;
+            }
+            else
+            {
+                Log.Debug("Amount of router kicks has been reached, ending event");
+                foreach (PlayerAPI player in PlayerAPI.List)
+                {
+                    Log.Debug($"Showing Router Kicking Simulator end message to {player}");
+                    player.Broadcast(new Exiled.API.Features.Broadcast(
+                        _config.RouterKickingSimulatorEndBroadcast,
+                        (ushort)_config.BroadcastDisplayTime));
+                }
+                
+                if (_config.RouterKickingSimulatorDisablesElevators)
+                {
+                    Log.Debug("Unlocking elevator doors");
+                    foreach (Door door in Door.List)
+                        if (door is ElevatorDoor { IsLocked: true } elevatorDoor)
+                            elevatorDoor.ChangeLock(DoorLockType.AdminCommand);
+                }
+
+                if (_config.RouterKickingSimulatorDisablesDecomAndNuke)
+                {
+                    Log.Debug("Waiting a fixed 15 seconds before reenabling decom & nuke");
+                    Timing.WaitForSeconds(15);
+                    Log.Debug("15 seconds has passed, reenabling decom and nuke");
+                    if (!Map.IsLczDecontaminated)
+                    {
+                        DecontaminationController.Singleton.RoundStartTime = _previousDecomTime;
+                    }
+
+                    Warhead.IsLocked = false;
+                    Warhead.Status = WarheadStatus.Armed;
+                    Warhead.DetonationTimer = _previousWarheadTime;
+                }
+
+                _ceRouterKickingSimulator = false;
+                
+                yield break;
+            }
+            yield return Timing.WaitForSeconds(_config.RouterKickingSimulatorTimeBetweenRouterKicks);
+        }
+    }
+    
     private static readonly ItemType[] WeaponTypes =
     [
         ItemType.GunA7,
@@ -1077,6 +1068,58 @@ public class ChaoticEventHandlers
         return natoLetter[randomUnit];
     }
 
+    private static void MtfFakeoutCassie(string cassieMessage, string cassieText, int scpCount)
+    {
+        Random random = new Random();
+        foreach (Player player in Player.List)
+        {
+            {
+                if (player.Role.Team == Team.SCPs)
+                    scpCount++;
+            }
+
+            if (scpCount == 0)
+            {
+                cassieMessage = _config.FakeoutRespawnAnnouncementsMTFSCPSDeadCassie;
+                cassieText = _config.FakeoutRespawnAnnouncementsMTFSCPSDeadCassieText;
+                int randomNatoLetter = random.Next(minValue: 1, maxValue: 26);
+                int randomNatoNumber = random.Next(minValue: 2, maxValue: 20);
+                cassieMessage = cassieMessage.Replace("{designation}",
+                    $"nato_{GetNatoLetter(randomNatoLetter)} {randomNatoNumber}");
+                cassieText = cassieText.Replace("{designation}",
+                    GetNatoName(randomNatoLetter) + " " + random.Next(randomNatoNumber));
+                Cassie.MessageTranslated(cassieMessage, cassieText);
+            }
+
+            else
+            {
+                cassieMessage = _config.FakeoutRespawnAnnouncementsMTFAliveSCPSCassie;
+                cassieText = _config.FakeoutRespawnAnnouncementsMTFAliveSCPSCassieText;
+                if (scpCount == 1)
+                {
+                    cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
+                    cassieText = cassieText.Replace("{scpnum}", $"{scpCount} SCP subject");
+                }
+
+                else
+                {
+                    cassieMessage = cassieMessage.Replace("{scpnum}", $"{scpCount} scpsubject");
+                    cassieText = cassieText.Replace("{scpnum}", $"{scpCount} SCP subject");
+                    cassieMessage = cassieMessage.Replace("scpsubject", "scpsubjects");
+                    cassieText = cassieText.Replace("SCP subject", "SCP subjects");
+                }
+
+                int randomNatoLetter = random.Next(minValue: 1, maxValue: 26);
+                int randomNatoNumber = random.Next(minValue: 2, maxValue: 20);
+                cassieMessage = cassieMessage.Replace("{designation}",
+                    $"nato_{GetNatoLetter(randomNatoLetter)} {randomNatoNumber}");
+                cassieText = cassieText.Replace("{designation}",
+                    GetNatoName(randomNatoLetter) + " " + random.Next(randomNatoNumber));
+                Cassie.MessageTranslated(cassieMessage, cassieText);
+            }
+        }
+    }
+
     public static void EndEvent()
     {
         if (!_ceStarted) return;
@@ -1099,6 +1142,12 @@ public class ChaoticEventHandlers
         {
             Timing.KillCoroutines(_rapidFireTeslas);
             _ceRapidFireTeslas = false;
+        }
+
+        if (_ceRouterKickingSimulator)
+        {
+            Timing.KillCoroutines(_routerKickingSimulator);
+            _ceRouterKickingSimulator = false;
         }
     }
 }

@@ -86,12 +86,12 @@ public class ChaoticConfig
 
     [Description("If giving all weapons is false, what weapons can be given?")]
     [CanBeNull]
-    public List<ItemType> GiveRandomWeaponsDefined { get; set; } = new List<ItemType>()
-    {
+    public List<ItemType> GiveRandomWeaponsDefined { get; set; } =
+    [
         ItemType.GunCOM15,
         ItemType.GunCOM18,
         ItemType.GunCrossvec
-    };
+    ];
 
     [Description("Should the death match event be active?")]
     public bool DeathMatchEvent { get; set; } = true;
@@ -216,4 +216,39 @@ public class ChaoticConfig
     
     [Description("What is the Rapid Fire Tesla Cooldown Time?")]
     public float RapidFireTeslaEventCooldownTime { get; set; } = 0.1f;
+
+    [Description("Should players shitting their pants event be active?")]
+    public bool PlayerShittingPantsEvent { get; set; } = true;
+
+    [Description("What should the broadcast say to the players when they shit their pants")]
+    public string PlayerShittingPantsBroadcast { get; set; } = "Damn it I shit my pants";
+
+    [Description("Should router kicking simulator event be active?")]
+    public bool RouterKickingSimulatorEvent { get; set; } = true;
+
+    [Description("How many times should the router be kicked?")]
+    public int RouterKickingSimulatorRouterKickAmount { get; set; } = 10;
+
+    [Description("How long should it take in between router kicks?")]
+    public float RouterKickingSimulatorTimeBetweenRouterKicks { get; set; } = 10f;
+
+    [Description("How much lag should the players experience from the router kick?")]
+    public float RouterKickingSimulatorLagTime { get; set; } = 3f;
+
+    [Description("What should the broadcast say to the player when their router's start to be kicked?")]
+    public string RouterKickingSimulatorStartBroadcast { get; set; } =
+        "Sorry I had enough with your router for a little bit";
+
+    [Description("What should the broadcast say to the player after the event ends")]
+    public string RouterKickingSimulatorEndBroadcast { get; set; } = "I kicked your router enough, sorry about that";
+
+    [Description("How long should the delay be **BEFORE** the router kicking simulator starts")]
+    public float RouterKickingSimulatorStartWaitTime { get; set; } = 15f;
+
+    [Description(
+        "Should the router kicking simulator disable elevators (to avoid people getting teleported into the void")]
+    public bool RouterKickingSimulatorDisablesElevators { get; set; } = true;
+
+    [Description("Should events like decontaimination and warhead be disabled for this event")]
+    public bool RouterKickingSimulatorDisablesDecomAndNuke { get; set; } = true;
 }
