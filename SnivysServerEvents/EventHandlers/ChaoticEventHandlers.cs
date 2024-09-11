@@ -955,9 +955,12 @@ public class ChaoticEventHandlers
                         DecontaminationController.Singleton.RoundStartTime = _previousDecomTime;
                     }
 
-                    Warhead.IsLocked = false;
-                    Warhead.Status = WarheadStatus.Armed;
-                    Warhead.DetonationTimer = _previousWarheadTime;
+                    if (!Warhead.IsDetonated)
+                    {
+                        Warhead.IsLocked = false;
+                        Warhead.Status = WarheadStatus.Armed;
+                        Warhead.DetonationTimer = _previousWarheadTime;
+                    }
                 }
 
                 _ceRouterKickingSimulator = false;
