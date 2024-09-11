@@ -58,7 +58,7 @@ public class ChaoticEventHandlers
         for (;;)
         {
             float chaoticEventCycle = _config.TimeForChaosEvent;
-            int chaosRandomNumber = random.Next(minValue:1, maxValue:20);
+            int chaosRandomNumber = random.Next(minValue:1, maxValue:21);
             Log.Debug(chaosRandomNumber);
             if (_config.ChaosEventEndsOtherEvents)
             {
