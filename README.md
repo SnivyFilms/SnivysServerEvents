@@ -13,7 +13,9 @@ Currently the events part of the plugin is provided below
 - Freezing Temperatures Event
 
 Exiled Permission: vvevents.run
+
 RA Command: vve
+
 RA Sub Commands: Blackout, Chaotic, FreezingTemps, NameRedacted, 173Hydra, 173Infection, ShortPeople, VariableLights
 
 Feel free to fork and contribute to this plugin.
