@@ -1,7 +1,6 @@
 ﻿using System;
 using CommandSystem;
 using Exiled.Permissions.Extensions;
-using SnivysServerEvents.Commands.EventsCommands;
 
 namespace SnivysServerEvents.Commands
 {
@@ -12,7 +11,6 @@ namespace SnivysServerEvents.Commands
         public string Command { get; set; } = "Stop";
         public string[] Aliases { get; set; } = ["Kill", "Terminate", "End"];
         public string Description { get; set; } = "Stops all events";
-        public bool SanitizeResponse { get; set; } = false;
         
         public bool Execute(ArraySegment<string> args, ICommandSender sender, out string response)
         {

@@ -11,7 +11,6 @@ namespace SnivysServerEvents.Commands.EventsCommands
         public string Command { get; set; } = "Blackout";
         public string[] Aliases { get; set; } = ["LightsOut"];
         public string Description { get; set; } = "Starts the Blackout Event";
-        public bool SanitizeResponse { get; set; } = false;
 
         public bool Execute(ArraySegment<string> args, ICommandSender sender, out string response)
         {

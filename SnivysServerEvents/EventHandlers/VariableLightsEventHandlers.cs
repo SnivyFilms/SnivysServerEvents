@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MEC;
 using SnivysServerEvents.Configs;
 using Exiled.API.Features;

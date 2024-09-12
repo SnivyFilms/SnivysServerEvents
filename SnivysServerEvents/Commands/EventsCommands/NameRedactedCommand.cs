@@ -9,9 +9,8 @@ namespace SnivysServerEvents.Commands.EventsCommands
     internal class NameRedactedCommand : ICommand
     {
         public string Command { get; set; } = "NameRedacted";
-        public string[] Aliases { get; set; } = Array.Empty<string>();
+        public string[] Aliases { get; set; } = [];
         public string Description { get; set; } = "Removes player's nicknames and sets them to something else";
-        public bool SanitizeResponse { get; set; } = false;
 
         public bool Execute(ArraySegment<string> args, ICommandSender sender, out string response)
         {

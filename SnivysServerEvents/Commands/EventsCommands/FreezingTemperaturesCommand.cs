@@ -11,7 +11,6 @@ namespace SnivysServerEvents.Commands.EventsCommands
         public string Command { get; set; } = "FreezingTemps";
         public string[] Aliases { get; set; } = ["Cold", "Freezing"];
         public string Description { get; set; } = "Starts the Freezing Temperature Event";
-        public bool SanitizeResponse { get; set; } = false;
 
         public bool Execute(ArraySegment<string> args, ICommandSender sender, out string response)
         {

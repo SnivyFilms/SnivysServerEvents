@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Features;
@@ -9,11 +8,8 @@ using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
 using MEC;
 using PlayerRoles;
-using PluginAPI.Events;
-using SnivysServerEvents.EventHandlers;
 using UnityEngine;
 using Random = System.Random;
-using Events = SnivysServerEvents.EventHandlers;
 
 // ReSharper disable InconsistentNaming
 

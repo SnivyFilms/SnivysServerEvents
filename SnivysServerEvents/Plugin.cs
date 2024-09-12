@@ -1,8 +1,6 @@
 ﻿using System;
 using Exiled.API.Features;
-using Exiled.Events.EventArgs.Server;
 using SnivysServerEvents.Configs;
-using SnivysServerEvents.EventHandlers;
 using Server = Exiled.Events.Handlers.Server;
 
 namespace SnivysServerEvents
