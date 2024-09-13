@@ -1,5 +1,7 @@
 # SnivysServerEvents
 
+![Downloads](https://img.shields.io/github/downloads/SnivyFilms/SnivysServerEvents/total.svg)
+
 A plugin meant to add some togglable events that adds onto the normal round structure
 
 Currently the events part of the plugin is provided below
