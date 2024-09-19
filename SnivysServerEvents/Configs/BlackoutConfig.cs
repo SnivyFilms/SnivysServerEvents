@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace SnivysServerEvents.Configs
 {
@@ -12,5 +13,8 @@ namespace SnivysServerEvents.Configs
 
         [Description("Should the Blackout Event end when all 3 generators activate?")]
         public bool GeneratorEndsEvent { get; set; } = true;
+
+        [Description("What item should the player recieve when the blackout event starts?")]
+        public List<ItemType> BlackoutEventStartingItem { get; set; } = [ItemType.Lantern];
     }
 }

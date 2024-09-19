@@ -1,5 +1,6 @@
 ﻿using System;
 using CommandSystem;
+using Exiled.API.Features;
 using Exiled.Permissions.Extensions;
 using SnivysServerEvents.EventHandlers;
 
@@ -21,6 +22,7 @@ namespace SnivysServerEvents.Commands.EventsCommands
             }
             var infectionEventHandlers = new PeanutInfectionEventHandlers();
             response = "Starting Peanut Infection Event";
+            Log.Debug($"{sender} has started the Peanut Infection Event");
             return true;
         }
     }

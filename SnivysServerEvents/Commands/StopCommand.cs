@@ -1,5 +1,6 @@
 ﻿using System;
 using CommandSystem;
+using Exiled.API.Features;
 using Exiled.Permissions.Extensions;
 
 namespace SnivysServerEvents.Commands
@@ -21,6 +22,7 @@ namespace SnivysServerEvents.Commands
             }
             
             response = "Stopping all events";
+            Log.Debug($"{sender} has stopped all events");
             EventHandlers.EventHandlers.StopEventsCommand();
             return true;
         }

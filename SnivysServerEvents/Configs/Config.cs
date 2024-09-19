@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using Exiled.API.Interfaces;
 
@@ -9,8 +10,29 @@ namespace SnivysServerEvents.Configs
         [Description("Is the plugin enabled?")]
         public bool IsEnabled { get; set; } = true;
 
-        [Description("Debug Printouts")] 
+        [Description("Debug Printouts? *Attention this WILL flood your console with debug statements*")] 
         public bool Debug { get; set; } = false;
+
+        [Description("Can events randomly start?")]
+        public bool RandomlyStartingEvents { get; set; } = false;
+
+        [Description("What is the chance of the events running?")]
+        public int RandomEventStartingChance { get; set; } = 0;
+
+        [Description(
+            "The list of events that can randomly start, Valid options: Blackout, 173Infection, 173Hydra, Chaotic, Short, FreezingTemps, NameRedacted, VariableLights")]
+        public List<string> RandomEventsAllowedToStart { get; set; } = new List<string>
+        {
+            "Blackout",
+            "173Infection",
+            "173Hydra",
+            "Chaotic",
+            "Short",
+            "FreezingTemps",
+            "NameRedacted",
+            "VariableLights"
+        };
+        
         
         //Independent Event Configs
         public BlackoutConfig BlackoutConfig { get; set; } = new();

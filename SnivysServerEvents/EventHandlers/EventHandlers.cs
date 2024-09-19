@@ -65,6 +65,67 @@ namespace SnivysServerEvents.EventHandlers
             NameRedactedEventHandlers.EndEvent();
             Plugin.ActiveEvent = 0;
         }
+
+        //On round start, basically to see if events can start randomly
+        public void OnRoundStart()
+        {
+            Log.Debug("Checking if Random Events config is set to true");
+            if (!Plugin.Instance.Config.RandomlyStartingEvents) return;
+            
+            Random random = new(); 
+            int chance = random.Next(100);
+            Log.Debug($"Chance is {chance}, comparing to the chance to the defined chance {Plugin.Instance.Config.RandomlyStartingEvents}");
+            if (chance < Plugin.Instance.Config.RandomEventStartingChance)
+            {
+                Log.Debug("Getting the list of events that are able to be randomly started");
+                List<string> events = Plugin.Instance.Config.RandomEventsAllowedToStart;
+                Log.Debug("Getting a random event that is defined");
+                string selectedEvent = events[random.Next(events.Count)];
+                Log.Debug($"Random event selected: {selectedEvent}");
+                switch (selectedEvent)
+                {
+                    case "Blackout":
+                        Log.Debug("Activating Blackout Event");
+                        var blackoutEventHandlers = new BlackoutEventHandlers();
+                        break;
+                    case "173Infection":
+                        Log.Debug("Activating Peanut Infection Event");
+                        var infectionEventHandlers = new PeanutInfectionEventHandlers();
+                        break;
+                    case "173Hydra":
+                        Log.Debug("Activating Peanut Hydra Event");
+                        var hydraEventHandlers = new PeanutHydraEventHandlers();
+                        break;
+                    case "Chaotic":
+                        Log.Debug("Activating Chaotic Event");
+                        var chaoticHandlers = new ChaoticEventHandlers();
+                        break;
+                    case "Short":
+                        Log.Debug("Activating Short People Event");
+                        var shortEventHandlers = new ShortEventHandlers();
+                        break;
+                    case "FreezingTemps":
+                        Log.Debug("Activating Freezing Temperatures Event");
+                        var freezingTemperaturesHandlers = new FreezingTemperaturesEventHandlers();
+                        break;
+                    case "NameRedacted":
+                        Log.Debug("Activating Name Redacted Event");
+                        var nameRedactedHandler = new NameRedactedEventHandlers();
+                        break;
+                    case "VariableLights":
+                        Log.Debug("Activating Variable Lights Event");
+                        var variableEventHandlers = new VariableLightsEventHandlers();
+                        break;
+                    default:
+                        Log.Warn($"Unknown event: {selectedEvent}");
+                        Log.Warn("Valid Events: Valid options: Blackout, 173Infection, 173Hydra, Chaotic, Short, FreezingTemps, NameRedacted, VariableLights");
+                        Log.Warn("If this error randomly appears and you are sure you put in a valid event, please let the developer know as soon as possible");
+                        break;
+                }
+            }
+            else
+                Log.Debug("No random event was triggered.");
+        }
         
         //Blackout
         public void OnGeneratorEngagedBOE(GeneratorActivatingEventArgs ev)
@@ -95,6 +156,7 @@ namespace SnivysServerEvents.EventHandlers
         // Peanut Hydra
         public void OnDyingPHE(DyingEventArgs ev)
         {
+            Log.Debug("Checking if the died is SCP-173");
             if (ev.Player.Role != RoleTypeId.Scp173) return;
             _PHELastKnownHeath = ev.Player.Health;
             _PHELastKnownScale = ev.Player.Scale.y;
@@ -104,14 +166,18 @@ namespace SnivysServerEvents.EventHandlers
         {
             if (ev.TargetOldRole != RoleTypeId.Scp173) return;
             //Get the player who died and set them back as 173 
+            Log.Debug("Get the player who died and set them back as 173");
             ev.Player.Role.Set(RoleTypeId.Scp173, SpawnReason.ForceClass, RoleSpawnFlags.None);
             //calculate the new scale and health
+            Log.Debug("Calculating the new scale and health");
             _PHEScale = Mathf.Max(0.1f, _PHELastKnownScale / 2);
             _PHENewHealth = _PHELastKnownHeath / 2;
             //apply them to the formerly dead player
+            Log.Debug("Applying them to the formerly dead player");
             ev.Player.Health = Mathf.Max(_PHENewHealth, 1);
             ev.Player.Scale.Set(_PHEScale, _PHEScale, _PHEScale);
             //Get a random spectator and set them as a duplicate 173
+            Log.Debug("Getting a random spectator and set them as a duplicate 173");
             Player newPlayer = GetRandomSpectator();
             switch (newPlayer)
             {
@@ -132,13 +198,16 @@ namespace SnivysServerEvents.EventHandlers
         private static Player GetRandomSpectator()
         {
             // Get a list of players with the Spectator role
+            Log.Debug("Getting a list of players who are spectators");
             List<Player> spectators = Player.List.Where(p => p.Role == RoleTypeId.Spectator).ToList();
 
             // If there are no spectators, return null
+            Log.Debug("Checking if there is any spectators");
             if (spectators.Count == 0)
                 return null;
 
             // Select a random spectator
+            Log.Debug("Selecting a random spectator");
             Random random = new();
             int index = random.Next(spectators.Count);
             return spectators[index];
@@ -147,6 +216,7 @@ namespace SnivysServerEvents.EventHandlers
         {
             foreach (var player in Player.List)
             {
+                Log.Debug($"Setting {player} size to {ShortEventHandlers.GetPlayerSize()}");
                 player.Scale = new Vector3(ShortEventHandlers.GetPlayerSize(), ShortEventHandlers.GetPlayerSize(), ShortEventHandlers.GetPlayerSize());
             }
         }
@@ -154,12 +224,15 @@ namespace SnivysServerEvents.EventHandlers
         //Chaos Event
         public void OnUsingMedicalItemCE(UsingItemCompletedEventArgs ev)
         {
+            Log.Debug("Checking if the item is used was a medical item of some sort");
             if (ev.Usable.Type is ItemType.Adrenaline or ItemType.Painkillers or ItemType.Medkit or ItemType.SCP500)
             {
                 Random random = new();
+                Log.Debug("Doing a half half chance to see if an effect should be applied");
                 int chance = random.Next(minValue: 1, maxValue: 2);
                 if (chance == 1)
                     return;
+                Log.Debug("Chance passed, getting a random effect");
                 chance = random.Next(minValue: 1, maxValue: 41);
                 switch (chance)
                 {

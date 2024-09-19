@@ -11,15 +11,12 @@ namespace SnivysServerEvents.EventHandlers
         
         public ShortEventHandlers()
         {
+            Log.Debug("Checking if Short People Event has already started");
             if (_seStarted) return;
             _config = Plugin.Instance.Config.ShortConfig;
             Plugin.ActiveEvent += 1;
+            Log.Debug("Adding On Changing Role SE Event Handlers");
             Exiled.Events.Handlers.Player.ChangingRole += Plugin.Instance.EventHandlers.OnRoleSwapSE;
-            Start();
-        }
-
-        private static void Start()
-        {
             _seStarted = true;
             foreach (var player in Player.List)
             {
@@ -34,14 +31,16 @@ namespace SnivysServerEvents.EventHandlers
             }
             Cassie.MessageTranslated(_config.StartEventCassieMessage, _config.StartEventCassieText);
         }
-
+        
         public static float GetPlayerSize()
         {
+            Log.Debug("Getting Config Defined Player Size");
             return _config.PlayerSize;
         }
 
         private static List<ItemType> GetStartingItems(List<ItemType> items)
         {
+            Log.Debug("Getting config defined starting items");
             return items;
         }
         public static void EndEvent()

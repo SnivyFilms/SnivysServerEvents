@@ -119,6 +119,7 @@ public class ChaoticConfig
 
     [Description("What should the broadcast say to the MTF & Guards that are going to be teleported to a target")]
     public string FBIOpenUpMTFText { get; set; } = "Fight or Flight.";
+    
     [Description("How long should it take before the foundation gets teleported to the target?")]
     public float FBITeleportTime { get; set; } = 5f;
 
@@ -251,4 +252,16 @@ public class ChaoticConfig
 
     [Description("Should events like decontaimination and warhead be disabled for this event")]
     public bool RouterKickingSimulatorDisablesDecomAndNuke { get; set; } = true;
+
+    [Description("Should the super speed event be active?")]
+    public bool SuperSpeedEvent { get; set; } = true;
+
+    [Description("How long should the super speed last? (In seconds)")]
+    public float SuperSpeedDuration { get; set; } = 15;
+
+    [Description("What should the intensity of the super speed? (Max: 255)")]
+    public byte SuperSpeedIntensity { get; set; } = 200;
+
+    [Description("What should the broadcast be that shows to players for super speed")]
+    public string SuperSpeedBroadcast { get; set; } = "Gotta go fast";
 }

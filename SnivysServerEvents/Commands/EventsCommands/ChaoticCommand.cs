@@ -1,5 +1,6 @@
 ﻿using System;
 using CommandSystem;
+using Exiled.API.Features;
 using Exiled.Permissions.Extensions;
 using SnivysServerEvents.EventHandlers;
 
@@ -21,6 +22,7 @@ namespace SnivysServerEvents.Commands.EventsCommands
             }
             var chaoticHandlers = new ChaoticEventHandlers();
             response = "Starting Chaotic Event";
+            Log.Debug($"{sender} has started the Chaotic Event");
             return true;
         }
     }

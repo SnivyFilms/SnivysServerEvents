@@ -1,5 +1,6 @@
 ﻿using System;
 using CommandSystem;
+using Exiled.API.Features;
 using Exiled.Permissions.Extensions;
 using SnivysServerEvents.EventHandlers;
 
@@ -21,6 +22,7 @@ namespace SnivysServerEvents.Commands.EventsCommands
             }
             var shortEventHandlers = new ShortEventHandlers();
             response = "Starting Short People Event";
+            Log.Debug($"{sender} has started the Short People Event");
             return true;
         }
     }

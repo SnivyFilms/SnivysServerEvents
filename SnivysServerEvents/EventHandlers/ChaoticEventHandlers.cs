@@ -38,13 +38,10 @@ public class ChaoticEventHandlers
     private static double _previousDecomTime;
     public ChaoticEventHandlers()
     {
+        Log.Debug("Checking if Chaotic Event has already started");
+        if (_ceStarted) return;
         _config = Plugin.Instance.Config.ChaoticConfig;
         Plugin.ActiveEvent += 1;
-        Start();
-    }
-
-    private void Start()
-    {
         _ceStarted = true;
         Cassie.MessageTranslated(_config.StartEventCassieMessage, _config.StartEventCassieText);
         _choaticHandle = Timing.RunCoroutine(ChaoticTiming());
@@ -58,7 +55,7 @@ public class ChaoticEventHandlers
         for (;;)
         {
             float chaoticEventCycle = _config.TimeForChaosEvent;
-            int chaosRandomNumber = random.Next(minValue:1, maxValue:21);
+            int chaosRandomNumber = random.Next(minValue:1, maxValue:22);
             Log.Debug(chaosRandomNumber);
             if (_config.ChaosEventEndsOtherEvents)
             {
@@ -798,7 +795,28 @@ public class ChaoticEventHandlers
                         Log.Debug("Router kicking simulator event is disabled");
                     }
                     break;
+                //Super Speed Event
+                case 22:
+                    if (_config.SuperSpeedEvent)
+                    {
+                        Log.Debug("Super speed event is active, running code");
+                        foreach (PlayerAPI player in PlayerAPI.List)
+                        {
+                            Log.Debug($"Showing Super Speed message to {player}");
+                            player.Broadcast(new Exiled.API.Features.Broadcast(_config.SuperSpeedBroadcast, (ushort)_config.BroadcastDisplayTime));
+                            Log.Debug($"Giving super speed to {player}, with an intensity of {_config.SuperSpeedIntensity} & a duration of {_config.SuperSpeedDuration}");
+                            player.EnableEffect(EffectType.MovementBoost, _config.SuperSpeedIntensity, _config.SuperSpeedDuration, true);
+                        }
+                    }
+                    else
+                    {
+                        if (_config.ChaoticEventRerollIfASpecificEventIsDisabled)
+                            chaoticEventCycle = 1;
+                        Log.Debug("Super speed event is disabled");
+                    }
+                    break;
             }
+            Log.Debug($"The next event will run in {chaoticEventCycle} seconds");
             yield return Timing.WaitForSeconds(chaoticEventCycle);
         }
     }
@@ -913,18 +931,26 @@ public class ChaoticEventHandlers
             {
                 foreach (PlayerAPI player in PlayerAPI.List)
                     if (player.Role.Team != Team.Dead)
+                    {
+                        Log.Debug($"{player} is not dead, logging position");
                         playerPositions[player.Id] = player.Position;
+                    }
 
+                Log.Debug($"Waiting {_config.RouterKickingSimulatorLagTime} seconds");
                 Timing.WaitForSeconds(_config.RouterKickingSimulatorLagTime);
                 
                 foreach (PlayerAPI player in PlayerAPI.List)
                 {
                     if (playerPositions.TryGetValue(player.Id, out Vector3 position))
+                    {
+                        Log.Debug($"Getting {player} previously logged position");
                         player.Position = position;
+                    }
                     else
                         Log.Debug($"{player} isn't in the list. Most likely due to not being connected or alive during the last cycle.");
                 }
                 routerKickCount++;
+                Log.Debug($"Adding to the router kick count, which is now {routerKickCount}");
             }
             else
             {
@@ -967,6 +993,7 @@ public class ChaoticEventHandlers
                 
                 yield break;
             }
+            Log.Debug($"Waiting {_config.RouterKickingSimulatorTimeBetweenRouterKicks} seconds");
             yield return Timing.WaitForSeconds(_config.RouterKickingSimulatorTimeBetweenRouterKicks);
         }
     }
@@ -996,6 +1023,7 @@ public class ChaoticEventHandlers
     }
     private static PlayerAPI GetRandomPlayerFBI()
     {
+        Log.Debug("Getting a random player for the FBI Open Up Chaos Event");
         Random random = new Random();
         List<PlayerAPI> fbiOpenUpPossibleTargets = PlayerAPI.List.Where(p => p.Role != (RoleTypeId)Team.FoundationForces || p.Role != (RoleTypeId)Team.Scientists || p.Role != (RoleTypeId)Team.Dead).ToList();
         if (fbiOpenUpPossibleTargets.Count == 0)
@@ -1005,6 +1033,7 @@ public class ChaoticEventHandlers
     }
     private static string GetNatoName(int randomUnit)
     {
+        Log.Debug("Getting a Nato Name (even though its not called the Nato alphabet, its called the phonetic alphabet");
         Dictionary<int, string> natoAlphabet = new Dictionary<int, string>()
         {
             {1, "ALPHA"},
@@ -1039,6 +1068,7 @@ public class ChaoticEventHandlers
 
     private static string GetNatoLetter(int randomUnit)
     {
+        Log.Debug("Getting a random letter");
         Dictionary<int, string> natoLetter = new Dictionary<int, string>()
         {
             { 1, "A" },
@@ -1073,6 +1103,7 @@ public class ChaoticEventHandlers
 
     private static void MtfFakeoutCassie(string cassieMessage, string cassieText, int scpCount)
     {
+        Log.Debug("Running Mtf Fakeout Cassie handle");
         Random random = new Random();
         foreach (Player player in Player.List)
         {
@@ -1127,28 +1158,33 @@ public class ChaoticEventHandlers
     {
         if (!_ceStarted) return;
         _ceStarted = false;
+        Log.Debug("Killing main Coroutine Handle for Chaotic Events");
         Timing.KillCoroutines(_choaticHandle);
         Plugin.ActiveEvent -= 1;
         if (_ceMedicalItemEvent)
         {
+            Log.Debug("Removing On Using Item Completed Event");
             PlayerEvent.UsingItemCompleted -= Plugin.Instance.EventHandlers.OnUsingMedicalItemCE;
             _ceMedicalItemEvent = false;
         }
         
         if (_ceFakeWarheadEvent)
         {
+            Log.Debug("Killing fake warhead coroutine");
             Timing.KillCoroutines(_fakeWarheadHandle);
             _ceFakeWarheadEvent = false;
         }
 
         if (_ceRapidFireTeslas)
         {
+            Log.Debug("Killing rapid fire teslas coroutine");
             Timing.KillCoroutines(_rapidFireTeslas);
             _ceRapidFireTeslas = false;
         }
 
         if (_ceRouterKickingSimulator)
         {
+            Log.Debug("Killing router kicking coroutine");
             Timing.KillCoroutines(_routerKickingSimulator);
             _ceRouterKickingSimulator = false;
         }
