@@ -17,6 +17,7 @@ public class FreezingTemperaturesEventHandlers
     private static CoroutineHandle _freezingTemperaturesHandle;
     private static FreezingTemperaturesConfig _config;
     private static bool _fteStarted;
+    private static double _previousDecomTime;
     public FreezingTemperaturesEventHandlers()
     {
         Log.Debug("Checking if Freezing Temperatures Event has already started");
@@ -25,6 +26,7 @@ public class FreezingTemperaturesEventHandlers
         Plugin.ActiveEvent += 1;
         _fteStarted = true;
         Cassie.MessageTranslated(_config.StartEventCassieMessage, _config.StartEventCassieText);
+        _previousDecomTime = DecontaminationController.Singleton.RoundStartTime;
         DecontaminationController.Singleton.NetworkRoundStartTime = -1.0;
         _freezingTemperaturesHandle = Timing.RunCoroutine(FreezingTemperaturesTiming());
         Log.Debug("Stopping regular decontamination, starting custom freezing temperatures system");
@@ -196,6 +198,7 @@ public class FreezingTemperaturesEventHandlers
         if (!_fteStarted) return;
         _fteStarted = false;
         Plugin.ActiveEvent -= 1;
+        DecontaminationController.Singleton.RoundStartTime = _previousDecomTime;
         Timing.KillCoroutines(_freezingTemperaturesHandle);
     }
 }
