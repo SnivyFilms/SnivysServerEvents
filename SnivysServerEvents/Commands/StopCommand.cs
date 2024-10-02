@@ -10,7 +10,7 @@ namespace SnivysServerEvents.Commands
     internal class StopCommand : ICommand
     {
         public string Command { get; set; } = "Stop";
-        public string[] Aliases { get; set; } = ["Kill", "Terminate", "End"];
+        public string[] Aliases { get; set; } = ["Terminate", "End"];
         public string Description { get; set; } = "Stops all events";
         
         public bool Execute(ArraySegment<string> args, ICommandSender sender, out string response)
