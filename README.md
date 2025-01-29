@@ -1,3 +1,7 @@
+# NOTICE
+
+This plugin is end of life and as such is no longer getting updates. Please check out [Snivy's Ultimate Plugin Package](https://github.com/SnivyFilms/SnivysUltimatePackage) that contains this plugin, with more updates, along with a lot of other stuff in one plugin file.
+
 # SnivysServerEvents
 
 ![Downloads](https://img.shields.io/github/downloads/SnivyFilms/SnivysServerEvents/total.svg)
